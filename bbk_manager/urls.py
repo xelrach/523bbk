@@ -1,12 +1,12 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('volunteer_manager.views',
+urlpatterns = patterns('bbk.views',
     (r'^volunteer_signup/$', 'volunteer_signup'),
     (r'^admin/$', 'admin'),
     (r'^volunteer/$', 'volunteer'),
 )
 #URLs for events
-urlpatterns += patterns('volunteer_manager.views',
+urlpatterns += patterns('bbk.views',
     (r'^event/$', 'events'),
     (r'^event/create/$', 'event_create'),
     (r'^event/(?P<event_id>\d+)/$', 'event_details'),

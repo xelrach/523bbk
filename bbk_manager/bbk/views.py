@@ -1,5 +1,5 @@
 import datetime
-from volunteer_manager.models import *
+from bbk.models import *
 from django_utils import *
 
 def events(request):
