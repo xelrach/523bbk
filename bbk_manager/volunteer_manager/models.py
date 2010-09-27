@@ -1,15 +1,14 @@
 from django.db import models
 
-class User(models.model):
-    first_name = models.charField(max_length=100)
-    last_name = modles.charField(max_length=100)
-    email = modles.charField(max_length=100)
-    phone = modles.intField()
+class User(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
+    phone = models.IntegerField()
 
-
-class Event(models.model):
-    title = models.charField(max_length=300)
-    start = models.dateTime()
-    end = models.dateTime()
-    description = models.textField()
+class Event(models.Model):
+    title = models.CharField(max_length=300)
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    description = models.TextField()
 

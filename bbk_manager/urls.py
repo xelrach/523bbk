@@ -1,17 +1,18 @@
 from django.conf.urls.defaults import *
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
-
-urlpatterns = patterns('',
-    # Example:
-    # (r'^bbk_manager/', include('bbk_manager.foo.urls')),
-
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
-    # to INSTALLED_APPS to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # (r'^admin/', include(admin.site.urls)),
+urlpatterns = patterns('volunteer_manager.views',
+    (r'^volunteer_signup/$', 'volunteer_signup'),
+    (r'^admin/$', 'admin'),
+    (r'^volunteer/$', 'volunteer'),
+)
+#URLs for events
+urlpatterns += patterns('volunteer_manager.views',
+    (r'^event/$', 'events'),
+    (r'^event/create/$', 'event_create'),
+    (r'^event/(?P<event_id>\d+)/$', 'event_details'),
+    (r'^event/(?P<event_id>\d+)/edit/$', 'event_edit'),
+)
+#Serve static files
+urlpatterns += patterns('',
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'static'}),
 )
