@@ -9,16 +9,12 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '523bbk',                # Or path to database file if using sqlite3.
-        'USER': 'noneman',               # Not used with sqlite3.
-        'PASSWORD': '523bbk_pass',       # Not used with sqlite3.
-        'HOST': 'classroom.cs.unc.edu',  # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
+DATABASE_ENGINE = 'mysql' # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+DATABASE_NAME = '523bbk'                # Or path to database file if using sqlite3.
+DATABASE_USER = 'noneman'               # Not used with sqlite3.
+DATABASE_PASSWORD = '523bbk_pass'       # Not used with sqlite3.
+DATABASE_HOST = 'classroom.cs.unc.edu'  # Set to empty string for localhost. Not used with sqlite3.
+DATABASE_PORT = ''                      # Set to empty string for default. Not used with sqlite3.
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -88,6 +84,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'bbk',
     #'django.contrib.sites',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
