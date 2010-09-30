@@ -1,7 +1,10 @@
 # Django settings for bbk_manager project.
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -74,7 +77,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'bbk_manager.urls'
 
 TEMPLATE_DIRS = (
-    'templates'
+    os.path.join(SITE_ROOT, 'templates')
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
