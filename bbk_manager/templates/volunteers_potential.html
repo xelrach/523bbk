@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<title>Potential Volunteers</title>
+	</head>
+	<body>
+		<table>
+			<thead>
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Email</th>
+					<th>Phone</th>
+				</tr>
+			</thead>
+			<tbody>
+{% for user in volunteers %}
+				<tr>
+					<td>{{user.first_name|e}}</td>
+					<td>{{user.last_name|e}}</td>
+					<td>{{user.email|e}}</td>
+					<td>{{user.phone|e}}</td>
+				</tr>
+{% endfor %}
+			</tbody>
+		</table>
+	</body>
+</html>

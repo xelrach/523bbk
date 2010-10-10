@@ -1,0 +1,16 @@
+<html>
+	<head>
+		<title>Volunteer Signup</title>
+	</head>
+	<body>
+		<form method="POST">
+			<p>
+      <label>First Name: <input type="text" name="first_name" value="{{user.first_name|e}}" /></label><br />
+      <label>Last Name: <input type="text" name="last_name" value="{{user.last_name|e}}" /></label><br />
+      <label>Email: <input type="text" name="email" value="{{user.email|e}}" /></label><br />
+      <label>Phone: <input type="text" name="phone" value="{{user.phone|e}}" /></label><br />
+			<input type="submit" value="Sign Up!" />
+			</p>
+		</form>
+	</body>
+</html>

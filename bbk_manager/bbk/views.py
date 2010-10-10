@@ -43,3 +43,24 @@ def volunteer_signup(request):
         pass
     print "New/Failed Sign Up"
     return render_to_response('volunteer_signup.html', {'user':user})
+
+def volunteers(request):
+    vols = User.objects.all().order_by('last_name')
+    return render_to_response("volunteers.html", {"volunteers":vols})
+
+def volunteers_xml(request, status):
+    print "volunteers_xml"
+    vols = User.objects
+    print status
+    print dir(status)
+    if status == "all":
+        vols = vols.all()
+    elif status == "active":
+        vols = vols.filter(status="active")
+    elif status == "pending":
+        vols = vols.filter(Q(status="pending") | Q(status="started"))
+    else:
+        raise Http404
+
+    vols = vols.order_by('last_name')
+    return render_to_response("volunteers.xml", {"volunteers":vols}, "text/xml")

@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<title>Volunteer Listing</title>
+		<script type="text/javascript" src="/static/javascript/prototype.js"></script>
+		<script type="text/javascript">
+			function set_list(list, url) {
+				console.log("set_list");
+				console.log(url);
+				//grey list
+				new Ajax.Request(url,{ 
+					"method":"get",
+					onSuccess: function(transport) {
+						console.log("Success");
+						list.innerHTML = "";
+						vols = transport.responseXML.documentElement;
+						console.log(vols);
+						vols.children.each(function(vol) {
+							var li = document.createElement('li');
+							console.log(vol.children[0]);
+							li.innerHTMl = vol.children[0];
+							list.appendChild(li);
+						});
+					},
+					onFailure: function() {console.log("Fail");},
+				});
+			}
+
+			function make_tab(text) {
+				var tab = document.createElement('div');
+				tab.className = "tab";
+				tab.innerHTML = text;
+				return tab;
+			}
+
+			document.observe("dom:loaded", function() {
+					var body = $('app');
+					var tabs = document.createElement('div');
+					var list = document.createElement('ul');
+					body.appendChild(tabs);
+					body.appendChild(list);
+					/* Make tabs */
+					var div_all = make_tab("All");
+					var div_active = make_tab("Active");
+					var div_pending = make_tab("Pending");
+					tabs.appendChild(div_all);
+					tabs.appendChild(div_active);
+					tabs.appendChild(div_pending);
+
+					set_list(list, "/volunteers/all/");
+			});
+		</script>
+	</head>
+	<body>
+		<div id="app">
+		</div>
+	</body>
+</html>
