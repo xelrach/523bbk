@@ -1,0 +1,16 @@
+.tab {
+	display:inline-block;
+	border:1px blue solid;
+	-moz-border-radius-topleft:5px;
+	-moz-border-radius-topright:5px;
+	border-radius-topleft:5px;
+	border-radius-topright:5px;
+	margin:0px 2px;
+	padding:2px 3px;
+	cursor: pointer;
+}
+/*Fix Me!!!*/
+.tab:hover {
+	background-color:Azure;
+	color:#FFFFFF;
+}

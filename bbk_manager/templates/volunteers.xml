@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <volunteers>
 {% for vol in volunteers %}
-	<volunteer>
-		<first_name>{{ vol.first_name|e }}</first_name>
-		<last_name>{{ vol.last_name|e }}</last_name>
-		<email>{{ vol.email|e }}</email>
-		<phone>{{ vol.phone|e }}</phone>
-		<status>{{ vol.status|e }}</status>
-	</volunteer>
+<volunteer
+		volunteer_id="{{ vol.id|e }}"
+		first_name="{{ vol.first_name|e }}" 
+		last_name="{{ vol.last_name|e }}"
+		email="{{ vol.email|e }}"
+		phone="{{ vol.phone|e }}"
+		status="{{ vol.status|e }}" />
 {% endfor %}
 </volunteers>

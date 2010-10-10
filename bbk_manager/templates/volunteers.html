@@ -1,25 +1,27 @@
 <html>
 	<head>
-		<title>Volunteer Listing</title>
+    <title>Volunteer Listing</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/admin.css" />
 		<script type="text/javascript" src="/static/javascript/prototype.js"></script>
 		<script type="text/javascript">
 			function set_list(list, url) {
-				console.log("set_list");
-				console.log(url);
 				//grey list
 				new Ajax.Request(url,{ 
 					"method":"get",
-					onSuccess: function(transport) {
-						console.log("Success");
+          onSuccess: function(transport) {
+            try{
 						list.innerHTML = "";
 						vols = transport.responseXML.documentElement;
-						console.log(vols);
-						vols.children.each(function(vol) {
-							var li = document.createElement('li');
-							console.log(vol.children[0]);
-							li.innerHTMl = vol.children[0];
+            for (var i=0; i<vols.children.length; i++) {
+              var vol = vols.children[i];
+              var li = document.createElement('li');
+              var a = document.createElement('a');
+              a.setAttribute("href", "/volunteer/" + vol.getAttribute("volunteer_id") + "/");
+              a.innerHTML = vol.getAttribute("first_name") + " " + vol.getAttribute("last_name");
+              li.appendChild(a);
 							list.appendChild(li);
-						});
+            }
+            }catch (e) {console.log(e);}
 					},
 					onFailure: function() {console.log("Fail");},
 				});
@@ -32,16 +34,24 @@
 				return tab;
 			}
 
-			document.observe("dom:loaded", function() {
+      document.observe("dom:loaded", function() {
+          var all_url = "/volunteers/all/";
+          var active_url = "/volunteers/active/";
+          var pending_url = "/volunteers/pending/";
+
 					var body = $('app');
 					var tabs = document.createElement('div');
 					var list = document.createElement('ul');
 					body.appendChild(tabs);
 					body.appendChild(list);
 					/* Make tabs */
-					var div_all = make_tab("All");
-					var div_active = make_tab("Active");
-					var div_pending = make_tab("Pending");
+          var div_all = make_tab("All");
+          div_all.observe('click', function(evt) {set_list(list, all_url);});
+          var div_active = make_tab("Active");
+          div_active.observe('click', function(evt) {set_list(list, active_url);});
+          var div_pending = make_tab("Pending");
+          div_pending.observe('click', function(evt) {set_list(list, pending_url);});
+
 					tabs.appendChild(div_all);
 					tabs.appendChild(div_active);
 					tabs.appendChild(div_pending);
