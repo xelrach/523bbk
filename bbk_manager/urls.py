@@ -1,10 +1,12 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('bbk.views',
-    (r'^volunteer_signup/$', 'volunteer_signup'),
     (r'^admin/$', 'admin'),
+    (r'^application/$', 'application'),
+    (r'^login/$', 'login'),
+    (r'^volunteer_signup/$', 'volunteer_signup'),
     (r'^volunteer/$', 'volunteer'),
-    (r'^potential_volunteers/$', 'potential_volunteers'),
+#    (r'^potential_volunteers/$', 'potential_volunteers'),
     (r'^volunteers/$', 'volunteers'),
     (r'^volunteers/(?P<status>\w+)/$', 'volunteers_xml'),
 )
