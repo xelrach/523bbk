@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <title>Log In</title>
+  </head>
+  <body>
+    <form method="POST">
+      {% if message %}
+      <p>{{message}}</p>
+      {% endif %}
+      <p>
+        <label for="email">Email: </label><input type="text" name="email" /><br />
+        <label for="password">Password: </label><input type="password" name="password" /><br />
+        <input type="submit" value="Log In" />
+      </p>
+     </form>
+   </body>
+ </html>

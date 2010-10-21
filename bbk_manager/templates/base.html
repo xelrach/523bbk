@@ -1,0 +1,14 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>{% block title %}Bounce Back Kids{% endblock %}</title>
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    {%- if user %}
+    <p>Welcome {{user.first_name|e}} {{user.last_name|e}}</p>
+    {%- endif %}
+    {%- block content %}{% endblock %}
+  </body>
+</html>
