@@ -66,11 +66,18 @@ def volunteer_signup(request):
     user = User()
     user.phone = ''
     if request.POST and len(request.POST)>0:
-        user.first_name = request.POST.get('first_name', '')
-        user.last_name = request.POST.get('last_name', '')
-        user.email = request.POST.get('email', '')
-        user.phone = request.POST.get('phone', '')
         try:
+            user.first_name = request.POST['first_name']
+            user.last_name = request.POST['last_name']
+            user.email = request.POST['email']
+            if request.POST['pwd1']<>request.POST['pwd2']:
+                raise Exception
+            user.set_password(request.POST['pwd1'])
+            phone = Phone()
+            phone.number = request.POST['phone']
+            user.save()
+            phone.save()
+            user.phones.add(phone)
 #            if not is_valid_email(user.email):
 #                raise forms.ValidationError('%s is not a valid e-mail address.' % email)
             user.save()
@@ -88,10 +95,7 @@ def volunteers(request):
     return render_to_response("volunteers.html", {"volunteers":vols})
 
 def volunteers_xml(request, status):
-    print "volunteers_xml"
     vols = User.objects
-    print status
-    print dir(status)
     if status == "all":
         vols = vols.all()
     elif status == "active":
