@@ -5,10 +5,23 @@ from django_utils import *
 
 def admin(request):
     user = check_login(request)
-    return render_to_response("admin.html",{'user':user})
+    return render_to_response("admin.html", {'user':user})
 
 def application(request):
-    return HttpResponse("")
+    user = check_login(request)
+    application = Application(user=user)
+    try:
+        application = Application.objects.get(user=user)
+    except:
+        pass
+    if request.method=="POST":
+        application.former_names = request.POST.get('former_names','')
+        application.experience = request.POST.get('experience','')
+        application.skills = request.POST.get('skills','')
+        application.involvement = request.POST.get('involvement','')
+        application.save()
+    user.application = application
+    return render_to_response("application.html", {'user':user})
 
 def check_login(request):
     try:
@@ -39,7 +52,6 @@ def login(request):
             user.check_password(request.POST['password'])
             request.session.set_expiry(None)
             request.session['auth_id'] = user.id
-            print "Redirecting"
             if user.status=="applying" or user.status=="pending":
                 return HttpResponseRedirect(reverse('bbk.views.application'))
             if user.status=="active":
@@ -47,7 +59,6 @@ def login(request):
             if user.status=="admin":
                 return HttpResponseRedirect(reverse('bbk.views.admin'))
         except Exception as e:
-            print e
             return render_to_response('login.html', {'message':"Login Failed"})
     return render_to_response('login.html')
 
@@ -81,13 +92,10 @@ def volunteer_signup(request):
 #            if not is_valid_email(user.email):
 #                raise forms.ValidationError('%s is not a valid e-mail address.' % email)
             user.save()
-            print "Success!"
-            return render_to_response('volunteer_signedup.html', {'user':user})
+            return HttpResponseRedirect(reverse('bbk.views.application'))
         except Exception as e:
-            print e
             pass
         pass
-    print "New/Failed Sign Up"
     return render_to_response('volunteer_signup.html', {'user':user})
 
 def volunteers(request):

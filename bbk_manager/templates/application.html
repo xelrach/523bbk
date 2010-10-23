@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Volunteer Application{% endblock %}
+{% block content %}
+<h1>Volunteer Application</h1>
+<form method="POST">
+  <p>
+  <label for="former_names">Former Names:</label><br />
+  <textarea name="former_names">{{user.application.former_names|e}}</textarea>
+  </p>
+  <p>
+  <label for="experience">Experience:</label><br />
+  <textarea name="experience">{{user.application.experience|e}}</textarea>
+  </p>
+  <p>
+  <label for="skills">Skills:</label><br />
+  <textarea name="skills">{{user.application.skills|e}}</textarea>
+  </p>
+  <p>
+  <label for="involvement">Involvement:</label><br />
+  <textarea name="involvement">{{user.application.involvement|e}}</textarea>
+  </p>
+  <p>
+  <input type="submit" name="s" value="Save" /><input type="submit" name="s" value="Submit" />
+  </p>
+</form>
+{% endblock %}

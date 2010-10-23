@@ -9,7 +9,7 @@ class Address(models.Model):
     zip_code = models.CharField(max_length=7, default="")
 
 class Application(models.Model):
-    user = models.ForeignKey('User')
+    user = models.OneToOneField('User', related_name="application")
     former_names = models.CharField(max_length=255)
     birthdate = models.DateField(null=True)
     experience = models.TextField()
