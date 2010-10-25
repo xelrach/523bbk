@@ -30,8 +30,8 @@ def check_login(request):
         return None
 
 def events(request):
-    current = Event.objects.filter(end__gt=datetime.datetime.now())
-    return render_to_response('events.html', {'events':current})
+    current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
+    return render_to_response('events.html', {'current_event_list':current_event_list})
 
 def event_create(request):
     event = Event()

@@ -2,5 +2,13 @@
   <head>
   </head>
   <body>
+  {% for event in current_event_list %}
+  <ul>
+  <li>{{ event.title }}</a></li>
+  <li>{{ event.description }}</a></li>
+  <li>{{ event.start }}</a></li>
+  <li>{{ event.end }}</a></li>
+  </ul> 
+  {% endfor %}
   </body>
 </html>
