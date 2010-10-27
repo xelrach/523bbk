@@ -1,4 +1,7 @@
 from django.conf.urls.defaults import *
+import os
+
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 urlpatterns = patterns('bbk.views',
     (r'^admin/$', 'admin'),
@@ -20,5 +23,5 @@ urlpatterns += patterns('bbk.views',
 )
 #Serve static files
 urlpatterns += patterns('',
-    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'static'}),
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.join(SITE_ROOT, 'static')}),
 )
