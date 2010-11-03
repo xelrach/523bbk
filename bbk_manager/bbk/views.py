@@ -34,7 +34,18 @@ def events(request):
     return render_to_response('events.html', {'current_event_list':current_event_list})
 
 def event_create(request):
-    event = Event()
+    event = Event()    
+    if request.method=="POST":
+        try:	    
+            event.title = request.POST['title']
+    	    event.description = request.POST['description']
+            event.start = request.POST['start']
+            event.end = request.POST['end']
+            event.save()
+            return HttpResponseRedirect(reverse('bbk.views.events'))
+	except Exception as e:
+	    print e
+	    pass
     return render_to_response('event_edit.html', {'event':event})
 
 def event_details(request, event_id):
@@ -89,8 +100,8 @@ def volunteer_signup(request):
             user.save()
             phone.save()
             user.phones.add(phone)
-#            if not is_valid_email(user.email):
-#                raise forms.ValidationError('%s is not a valid e-mail address.' % email)
+            if not is_valid_email(user.email):
+              raise forms.ValidationError('%s is not a valid e-mail address.' % email)
             user.save()
             return HttpResponseRedirect(reverse('bbk.views.application'))
         except Exception as e:
