@@ -1,0 +1,7 @@
+{% macro address(adr, prefix="", pos=0) -%}
+<input type="text" name="{{prefix}}address_line1[{{pos}}]" value="{{adr.line1|e}}" /><br />
+<input type="text" name="{{prefix}}address_line2[{{pos}}]" value="{{adr.line2|e}}" /><br />
+<label for="{{prefix}}address_city[{{pos}}]">City: </label><input type="text" name="{{prefix}}address_city[{{pos}}]" value="{{adr.city|e}}" />
+<label for="{{prefix}}address_state[{{pos}}]">State: </label><input type="text" name="{{prefix}}address_state[{{pos}}]" value="{{adr.state|e}}" /><br />
+<label for="{{prefix}}address_zip[{{pos}}]">Zip: </label><input type="text" name="{{prefix}}address_zip[{{pos}}]" value="{{adr.zip|e}}" />
+{%- endmacro %}

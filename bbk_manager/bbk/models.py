@@ -17,11 +17,13 @@ class Application(models.Model):
     involvement = models.TextField()
 
 class Phone(models.Model):
-    number = models.CharField(max_length=20)
+    number = models.CharField(max_length=20,default="")
     location = models.CharField(max_length=2,default="")
 
     def get_number(self, seperator="."):
         number = self.number
+        if not number:
+            return ""
         formatted = ""
         if len(number)==11:
             formatted += number[0]+seperator
@@ -34,11 +36,15 @@ class Phone(models.Model):
             number = number[3:]
         return formatted + number
 
+    def __unicode__(self):
+        return self.get_number()
+
 class Reference(models.Model):
     name = models.CharField(max_length=100, default="")
     email = models.CharField(max_length=100, default="")
-    phone = models.ForeignKey(Phone)
-    address = models.ForeignKey(Address)
+    phone = models.ForeignKey(Phone, null=True)
+    address = models.ForeignKey(Address, null=True)
+    application = models.ForeignKey(Application, related_name="references")
 
 class User(models.Model):
     first_name = models.CharField(max_length=100)
