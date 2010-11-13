@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "forms.html" as forms %}
 {% block title %}Volunteer Application{% endblock %}
 {% block content %}
 <h1>Volunteer Application</h1>
@@ -19,6 +20,17 @@
   <label for="involvement">Involvement:</label><br />
   <textarea name="involvement">{{user.application.involvement|e}}</textarea>
   </p>
+  <p>References</p>
+  {% for ref in references %}
+  {%- set i = ref.id %}
+  <fieldset>
+  <label for="reference_name[{{i}}]">Name:</label><input type="text" name="reference_name[{{i}}]" value="{{ref.name|e}}" /><br />
+  Address<br />
+  {{forms.address(ref.address, "reference_", i)}}<br />
+  <label for="reference_phone[{{i}}]">Phone:</label><input type="text" name="reference_phone[{{i}}]" value="{{ref.phone|e}}" /><br />
+  <label for="reference_email[{{i}}]">Email:</label><input type="text" name="reference_email[{{i}}]" value="{{ref.email|e}}" /><br />
+  </fieldset>
+  {%- endfor %}
   <p>
   <input type="submit" name="s" value="Save" /><input type="submit" name="s" value="Submit" />
   </p>
