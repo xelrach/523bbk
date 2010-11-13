@@ -1,16 +1,17 @@
 <html>
-	<head>
-		<title>Event</title>
-	</head>
-	<body>
-		<form method="POST">
-			<p>
+  <head>
+    <title>Edit an Event</title>
+  </head>
+  <body>
+    <h2>Edit {{event.title|e}} </h2>
+    <form method="POST">
+      <p>
       <label>Title: <input type="text" name="title" value="{{event.title|e}}" /></label><br />
       <label>Description: <input type="text" name="description" value="{{event.description|e}}" /></label><br />
       <label>Event Start Time: <input type="text" name="start" value="{{event.start|e}}" /></label><br />
       <label>Event End Time: <input type="text" name="end" value="{{event.end|e}}" /></label><br />
-			<input type="submit" value="Create Event" />
-			</p>
-		</form>
-	</body>
+      <input type="submit" value="Edit Event" />
+      </p>
+    </form>
+  </body>
 </html>

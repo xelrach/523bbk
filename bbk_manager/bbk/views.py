@@ -34,19 +34,19 @@ def events(request):
     return render_to_response('events.html', {'current_event_list':current_event_list})
 
 def event_create(request):
-    event = Event()    
+    event = Event()
     if request.method=="POST":
         try:	    
             event.title = request.POST['title']
     	    event.description = request.POST['description']
             event.start = request.POST['start']
-            event.end = request.POST['end']
+            event.end = request.POST['end']    
             event.save()
             return HttpResponseRedirect(reverse('bbk.views.events'))
 	except Exception as e:
 	    print e
 	    pass
-    return render_to_response('event_edit.html', {'event':event})
+    return render_to_response('event_create.html', {'event':event})
 
 def event_details(request, event_id):
     event = get_object_or_404(Event, id=event_id)
@@ -54,6 +54,17 @@ def event_details(request, event_id):
 
 def event_edit(request, event_id):
     event = get_object_or_404(Event, id=event_id)
+    if request.method=="POST":
+        try:	    
+            event.title = request.POST['title']
+    	    event.description = request.POST['description']
+            event.start = request.POST['start']
+            event.end = request.POST['end']    
+            event.save()
+            return HttpResponseRedirect(reverse('bbk.views.events'))
+	except Exception as e:
+	    print e
+	    pass
     return render_to_response('event_edit.html', {'event':event})
 
 def login(request):

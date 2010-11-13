@@ -67,4 +67,5 @@ class Event(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
     description = models.TextField()
+    volunteers = models.ManyToManyField(User)
 
