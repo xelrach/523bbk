@@ -1,0 +1,20 @@
+<html>
+  <head>
+  </head>
+  <body>
+  <h2>{{event.title}} Details</h2>
+   <ul>
+    <li>{{ event.title }}</li>
+    <li>{{ event.description }}</li>
+    <li>{{ event.start }}</li>
+    <li>{{ event.end }}</li>
+   </ul>
+  List of volunteers ({{length}} total):   
+   <ul>
+   {% for volunteer in event_volunteers %}
+    <li> {{volunteer.first_name + volunteer.last_name}}</li>
+   {% endfor %}
+   </ul>
+  <a href = "/event/{{event.id}}/edit">Edit event</a>
+ </body>
+</html>
