@@ -1,9 +1,7 @@
-<html>
-  <head>
-    <title>Edit an Event</title>
-  </head>
-  <body>
-    <h2>Edit {{event.title|e}} </h2>
+{% extends "base.html" %}
+{% block title %}Bounce Back Kids -- Edit Event{% endblock %}
+{% block content %}
+  <h2>Edit {{event.title|e}} </h2>
     <form method="POST">
       <p>
       <label>Title: <input type="text" name="title" value="{{event.title|e}}" /></label><br />
@@ -13,5 +11,4 @@
       <input type="submit" value="Edit Event" />
       </p>
     </form>
-  </body>
-</html>
+{%- endblock %}

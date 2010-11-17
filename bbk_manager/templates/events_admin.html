@@ -1,7 +1,6 @@
-<html>
-  <head>
-  </head>
-  <body>
+{% extends "base.html" %}
+{% block title %}Bounce Back Kids Admin{% endblock %}
+{% block content %}
   {% for event in current_event_list %}
   <h3><a href = "/event/admin/{{event.id}}">{{ event.title }}</a></h3>
   <ul>
@@ -11,5 +10,4 @@
   </ul>
   {% endfor %}
   </ul> 
-  </body>
-</html>
+{%- endblock %}

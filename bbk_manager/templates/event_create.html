@@ -1,9 +1,7 @@
-<html>
-  <head>
-    <title>Create an Event</title>
-  </head>
-  <body>
-    <h2>Create an Event</h2>
+{% extends "base.html" %}
+{% block title %}Bounce Back Kids -- Create An Event{% endblock %}
+{% block content %}
+  <h2>Create an Event</h2>
     <form method="POST">
       <p>
       <label>Title: <input type="text" name="title" /></label><br />
@@ -13,5 +11,4 @@
       <input type="submit" value="Create Event" />
       </p>
     </form>
-  </body>
-</html>
+{%- endblock %}

@@ -1,6 +1,6 @@
-<html>
-	<head>
-    <title>Volunteer Listing</title>
+{% extends "base.html" %}
+{% block title %}Bounce Back Kids Admin{% endblock %}
+{%- block head %}
     <link rel="stylesheet" type="text/css" href="/static/css/admin.css" />
 		<script type="text/javascript" src="/static/javascript/prototype.js"></script>
 		<script type="text/javascript">
@@ -58,10 +58,9 @@
 
 					set_list(list, "/volunteers/all/");
 			});
-		</script>
-	</head>
-	<body>
+    </script>
+{%- endblock %}
+{%- block content %}
 		<div id="app">
 		</div>
-	</body>
-</html>
+{%- endclock %}

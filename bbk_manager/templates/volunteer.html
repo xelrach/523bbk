@@ -1,11 +1,9 @@
-<html>
-  <head>
-  </head>
-  <body>
+{% extends "base.html" %}
+{% block title %}Bounce Back Kids Admin{% endblock %}
+{% block content %}
   <h4>{{volunteer.first_name}} {{volunteer.last_name}}</h4>
   <ul>
   <li>Email: {{ volunteer.email }}</li>
   <li>Status: {{ volunteer.status }}</li>
   </ul>
- </body>
-</html>
+{%- endblock %}

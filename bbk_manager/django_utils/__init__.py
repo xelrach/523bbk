@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.template.defaulttags import URLNode
 from django.utils import translation
 from django.template import Context, loader
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, Http404, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from jinja2 import FileSystemLoader, Environment

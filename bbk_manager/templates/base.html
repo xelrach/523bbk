@@ -3,12 +3,22 @@
 <html>
   <head>
     <title>{% block title %}Bounce Back Kids{% endblock %}</title>
+    <style type="text/css">
+      #login_bar {
+        background-color:aqua;
+        text-align:right;
+      }
+    </style>
     {% block head %}{% endblock %}
   </head>
   <body>
+    <div id="login_bar">
     {%- if user %}
-    <p>Welcome {{user.first_name|e}} {{user.last_name|e}}</p>
+    {{user.first_name|e}} {{user.last_name|e}} | <a href="/logout/">Log Out</a>
+    {%- else %}
+    <a href="/login/">Log In</a>
     {%- endif %}
+    </div>
     {%- block content %}{% endblock %}
   </body>
 </html>

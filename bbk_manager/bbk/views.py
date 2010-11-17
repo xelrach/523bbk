@@ -6,6 +6,8 @@ from django_utils import *
 
 def admin(request):
     user = check_login(request)
+    if not user or user.status != "admin":
+        return HttpResponseRedirect(reverse('bbk.views.events'))
     return render_to_response("admin.html", {'user':user})
 
 def application(request):
@@ -163,6 +165,10 @@ def login(request):
     return render_to_response('login.html')
 
 def logout(request):
+    perform_logout(request)
+    return HttpResponseRedirect(reverse('bbk.views.events'))
+
+def perform_logout(request):
     request.session.flush()
     pass
 
@@ -177,7 +183,7 @@ def volunteer_signup(request):
     user = User()
     user.phone = ''
     if request.POST and len(request.POST)>0:
-        logout(request)
+        perform_logout(request)
         try:
             user.first_name = request.POST['first_name']
             user.last_name = request.POST['last_name']

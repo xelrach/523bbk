@@ -1,16 +1,14 @@
-<html>
-  <head>
-  </head>
-  <body>
-  <h2>{{event.title}} Details</h2>
+{% extends "base.html" %}
+{%- block title %}Bounce Back Kids Event {{event.title|e}}{% endblock %}
+{%- block content %}
+  <h2>{{event.title|e}} Details</h2>
   <ul>
-  <li>{{ event.title }}</li>
-  <li>{{ event.description }}</li>
-  <li>{{ event.start }}</li>
-  <li>{{ event.end }}</li>
+  <li>{{ event.title|e }}</li>
+  <li>{{ event.description|e }}</li>
+  <li>{{ event.start|e }}</li>
+  <li>{{ event.end|e }}</li>
   </ul>
   <form method="POST">
-  <input type="submit" value="Signup for Event" />
+  <input type="submit" name="signup" value="Signup for Event" />
   </form>
- </body>
-</html>
+{%- endblock %}
