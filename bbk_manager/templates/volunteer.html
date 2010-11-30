@@ -1,9 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Bounce Back Kids Admin{% endblock %}
+{% block title %}Bounce Back Kids Volunteer Admin{% endblock %}
 {% block content %}
   <h4>{{volunteer.first_name}} {{volunteer.last_name}}</h4>
+  <form method="POST">
   <ul>
-  <li>Email: {{ volunteer.email }}</li>
-  <li>Status: {{ volunteer.status }}</li>
+    <li><label>Email: <input type="text" name="email" value="{{ volunteer.email|e }}" /></label></li>
+  <li><label>Status: <select name="status">
+{%- for opt in ["pending","active","coordinator","admin"] %}
+    <option{{' selected="selected"' if opt==volunteer.status else ''}}>{{ opt|e }}</option>
+{%- endfor %}
+    </select></label></li>
   </ul>
+  <p><input type="submit" name="submit" value="Save" /><input type="submit" name="submit" value="Return To List" /></p>
+  </form>
 {%- endblock %}
