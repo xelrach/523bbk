@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//bouncebackkids.org//Events//EN
+X-WR-CALNAME;VALUE=TEXT:BounceBack Kids Events
+X-WR-TIMEZONE;VALUE=TEXT:America/New_York
+X-WR-CALDESC;VALUE=TEXT:All BounceBack Kids Events
+{%- for event in events %}
+BEGIN:VEVENT
+UID:event_{{event.id}}@bouncebackkids.org
+DTSTART;TZID=America/New_York:{{event.start|ts}}
+DTEND;TZID=America/New_York:{{event.end|ts}}
+SUMMARY:{{event.title|n}}
+DESCRIPTION:{{event.description|n}}
+END:VEVENT
+{%- endfor %}
+END:VCALENDAR

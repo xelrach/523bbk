@@ -98,8 +98,10 @@ def check_login(request):
         return None
 
 def events(request):
+    user = check_login(request)
     current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
-    return render_to_response('events.html', {'current_event_list':current_event_list})
+    url_ical = request.build_absolute_uri(reverse('bbk.views.events_ical'))
+    return render_to_response('events.html', {'current_event_list':current_event_list,'user':user,'url_ical':url_ical})
 
 def event_create(request):
     event = Event()
@@ -139,6 +141,13 @@ def event_edit(request, event_id):
 	    print e
 	    pass
     return render_to_response('event_edit.html', {'event':event})
+
+def events_ical(request):
+    current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
+    print current_event_list
+    response = render_to_response('events.ics', {'events':current_event_list}, "text/calendar")
+    response['Content-Disposition'] = 'attachment; filename="BounceBack Kids.ics"'
+    return response
 
 def events_admin(request):
     current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
