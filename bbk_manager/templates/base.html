@@ -4,20 +4,43 @@
   <head>
     <title>{% block title %}Bounce Back Kids{% endblock %}</title>
     <style type="text/css">
-      #login_bar {
-        background-color:aqua;
-        text-align:right;
+      #login_bar{
+        background-color: #00687F;
+        color: white;
+        text-align: right;
+      }
+      #login_bar a {
+        color: white;
+      }
+      #admin_nav{
+        float: left;
+      }
+      #user_nav {
+        float: left;
       }
     </style>
     {% block head %}{% endblock %}
   </head>
   <body>
     <div id="login_bar">
-    {%- if user %}
-    {{user.first_name|e}} {{user.last_name|e}} | <a href="/logout/">Log Out</a>
-    {%- else %}
-    <a href="/login/">Log In</a>
-    {%- endif %}
+      <span id = "admin_nav">
+	{% if user.status == "admin" %}
+	<a href = "/admin/">Admin Home</a>
+	{% endif %}
+      </span>
+      <span id = "user_nav">
+	{% if user.status == "active" %}
+	<a href = "/events/user/">My upcoming events</a>
+	<a href = "/events/">Events Calendar</a>
+	{% endif %}
+      </span>
+      <span id = "login_info">
+	{%- if user %}
+	{{user.first_name|e}} {{user.last_name|e}} | <a href="/logout/">Log Out</a>
+	{%- else %}
+	<a href="/login/">Log In</a>
+	{%- endif %}
+      </span>
     </div>
     {%- block content %}{% endblock %}
   </body>

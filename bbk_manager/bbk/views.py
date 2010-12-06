@@ -104,6 +104,7 @@ def events(request):
     return render_to_response('events.html', {'current_event_list':current_event_list,'user':user,'url_ical':url_ical})
 
 def event_create(request):
+    user = check_login(request)
     event = Event()
     if request.method=="POST":
         try:	    
@@ -116,18 +117,20 @@ def event_create(request):
 	except Exception as e:
 	    print e
 	    pass
-    return render_to_response('event_create.html', {'event':event})
+    return render_to_response('event_create.html', {'event':event,'user':user})
 
 def event_details(request, event_id):
+    user = check_login(request)
     event = get_object_or_404(Event, id=event_id)
     user = User.objects.get(id=request.session['auth_id'])
     if request.method=="POST":
         event.volunteers.add(user)
         event.save()
         return HttpResponseRedirect(reverse('bbk.views.events'))
-    return render_to_response('event.html', {'event':event})
+    return render_to_response('event.html', {'event':event, 'user':user})
 
 def event_edit(request, event_id):
+    user = check_login(request)
     event = get_object_or_404(Event, id=event_id)
     if request.method=="POST":
         try:	    
@@ -140,7 +143,7 @@ def event_edit(request, event_id):
 	except Exception as e:
 	    print e
 	    pass
-    return render_to_response('event_edit.html', {'event':event})
+    return render_to_response('event_edit.html', {'event':event, 'user':user})
 
 def events_ical(request):
     current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
@@ -150,14 +153,22 @@ def events_ical(request):
     return response
 
 def events_admin(request):
+    user = check_login(request)
     current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
-    return render_to_response('events_admin.html', {'current_event_list':current_event_list})
+    return render_to_response('events_admin.html', {'current_event_list':current_event_list, 'user':user})
+
+def events_user(request):
+    user = check_login(request)
+    user_id = user.id
+    user_events = Event.objects.filter(volunteers=user_id)
+    return render_to_response('events_user.html',{'user_events':user_events,'user':user})
 
 def event_admin_details(request, event_id):
+    user = check_login(request)
     event = get_object_or_404(Event, id=event_id)
     event_volunteers = event.volunteers.all()
     length = len(event_volunteers)
-    return render_to_response('event_admin.html', {'event':event, 'event_volunteers':event_volunteers, 'length':length})
+    return render_to_response('event_admin.html', {'event':event,'user':user, 'event_volunteers':event_volunteers, 'length':length})
 
 def login(request):
     if request.method == 'POST':
@@ -244,7 +255,7 @@ def volunteer_signup(request):
             user.save()
             phone.save()
             user.phones.add(phone)
-            # validation syntax below is incorrect. Need to change.
+            # validation syntax below doesn't seem to be working.
             #if not is_valid_email(user.email):
             # raise forms.ValidationError('%s is not a valid e-mail address.' % email)
             user.status = "applying"

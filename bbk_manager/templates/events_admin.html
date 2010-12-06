@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Bounce Back Kids Admin{% endblock %}
 {% block content %}
+  <h4><a href = "/event/create">Create an event<a></h4>
   {% for event in current_event_list %}
   <h3><a href = "/event/admin/{{event.id}}">{{ event.title }}</a></h3>
   <ul>
