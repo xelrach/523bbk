@@ -3,6 +3,7 @@ import re
 from django import forms
 from bbk.models import *
 from django_utils import *
+from django.core.mail import EmailMultiAlternatives
 
 def admin(request):
     user = check_login(request)
@@ -32,6 +33,8 @@ def application(request):
         application.experience = request.POST.get('experience','')
         application.skills = request.POST.get('skills','')
         application.involvement = request.POST.get('involvement','')
+        application.why = request.POST.get('why','')
+        application.how = request.POST.get('how','')
         application.save()
 
         ref_map = {}
@@ -95,8 +98,10 @@ def check_login(request):
         return None
 
 def events(request):
+    user = check_login(request)
     current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
-    return render_to_response('events.html', {'current_event_list':current_event_list})
+    url_ical = request.build_absolute_uri(reverse('bbk.views.events_ical'))
+    return render_to_response('events.html', {'current_event_list':current_event_list,'user':user,'url_ical':url_ical})
 
 def event_create(request):
     event = Event()
@@ -137,6 +142,13 @@ def event_edit(request, event_id):
 	    pass
     return render_to_response('event_edit.html', {'event':event})
 
+def events_ical(request):
+    current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
+    print current_event_list
+    response = render_to_response('events.ics', {'events':current_event_list}, "text/calendar")
+    response['Content-Disposition'] = 'attachment; filename="BounceBack Kids.ics"'
+    return response
+
 def events_admin(request):
     current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
     return render_to_response('events_admin.html', {'current_event_list':current_event_list})
@@ -175,9 +187,45 @@ def perform_logout(request):
 def pending(request):
     return render_to_response('pending.html')
 
+def send_acception_email(volunteer):
+    acception_message_base = "You've been accpeted as a volunteer for BounceBack Kids! Please visit "
+    events_url = reverse('bbk.views.events')
+    acception_message_txt = acception_message_base + events_url
+    acception_message_html = acception_message_base + '<a href="' + events_url + '">' + events_url + "</a>"
+    subject, from_email, to = "BounceBack Kids Application", "admin@bouncebackkids.org", [volunteer.email]
+
+    msg = EmailMultiAlternatives(subject, acception_message_txt, from_email, to)
+    msg.attach_alternative(acception_message_html, "text/html")
+    msg.send()
+
 def volunteer(request,volunteer_id):
+    user = check_login(request)
+    if not user or user.status != "admin":
+        return HttpResponseRedirect(reverse('bbk.views.events'))
     volunteer = get_object_or_404(User, id=volunteer_id)
-    return render_to_response('volunteer.html', {'volunteer':volunteer})
+
+    message = ""
+    if request.method=="POST":
+        if request.POST.get("submit","") != "Save":
+            return HttpResponseRedirect(reverse("bbk.views.volunteers"))
+
+        if "first_name" in request.POST:
+            volunteer.first_name = request.POST['first_name']
+        if "last_name" in request.POST:
+            volunteer.last_name = request.POST['last_name']
+        if "title" in request.POST:
+            volunteer.title = request.POST['title']
+        if "email" in request.POST:
+            volunteer.email = request.POST['email']
+        if "status" in request.POST:
+            if volunteer.status == "pending" and request.POST['status']=="active":
+                send_acception_email(volunteer)
+            volunteer.status = request.POST['status']
+            pass
+        volunteer.save()
+        message = "User Changes Saved"
+#        return HttpResponseRedirect(reverse('bbk.views.volunteers'))
+    return render_to_response('volunteer.html', {'volunteer':volunteer,'user':user,'message':message})
 
 def volunteer_signup(request):
     user = User()
@@ -210,17 +258,22 @@ def volunteer_signup(request):
     return render_to_response('volunteer_signup.html', {'user':user})
 
 def volunteers(request):
-    vols = User.objects.all().order_by('last_name')
-    return render_to_response("volunteers.html", {"volunteers":vols})
+    user = check_login(request)
+    if not user or user.status != "admin":
+        return HttpResponseRedirect(reverse('bbk.views.events'))
+    return render_to_response("volunteers.html", {"user":user})
 
 def volunteers_xml(request, status):
+    user = check_login(request)
+    if not user or user.status != "admin":
+        raise Http404
     vols = User.objects
     if status == "all":
-        vols = vols.all()
+        vols = vols.filter(status__in=["active","admin","coordinator","pending"])
     elif status == "active":
-        vols = vols.filter(status="active")
+        vols = vols.filter(status__in=["active","admin","coordinator"])
     elif status == "pending":
-        vols = vols.filter(Q(status="pending") | Q(status="started"))
+        vols = vols.filter(status="pending")
     else:
         raise Http404
 

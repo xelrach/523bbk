@@ -15,6 +15,8 @@ class Application(models.Model):
     experience = models.TextField()
     skills = models.TextField()
     involvement = models.TextField()
+    why = models.TextField()
+    how = models.TextField()
 
 class Phone(models.Model):
     number = models.CharField(max_length=20,default="")

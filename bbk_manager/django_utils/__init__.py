@@ -109,6 +109,9 @@ def csvify(text):
         new_text = '"' + new_text + '"'
     return new_text
 
+def make_timestamp(dt):
+    return dt.strftime("%Y%m%dT%H%M%S")
+
 def parse_datetime(timestr, parserinfo=None, **kwargs):
     return date_parser().parse(timestr, **kwargs)
 
@@ -121,3 +124,4 @@ env.filters['urlencode'] = urlencode
 env.filters['q'] = escape_quotes
 env.filters['sq'] = escape_single_quotes
 env.filters['n'] = escape_newline
+env.filters['ts'] = make_timestamp

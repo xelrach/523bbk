@@ -5,22 +5,31 @@
 <h1>Volunteer Application</h1>
 <form method="POST">
   <p>
-  <label for="former_names">Former Names:</label><br />
-  <textarea name="former_names">{{user.application.former_names|e}}</textarea>
+  <label for="former_names">Former Name(s) (please list any previous names, i.e. maiden or birth names):</label><br />
+  <textarea rows="2" cols="70" name="former_names">{{user.application.former_names|e}}</textarea>
   </p>
   <p>
-  <label for="experience">Experience:</label><br />
-  <textarea name="experience">{{user.application.experience|e}}</textarea>
+  <label for="experience">Volunteer Experience: Please Explain:</label><br />
+  <textarea rows="4" cols="70" name="experience">{{user.application.experience|e}}</textarea>
   </p>
   <p>
-  <label for="skills">Skills:</label><br />
-  <textarea name="skills">{{user.application.skills|e}}</textarea>
+  <label for="skills">Special Skills (Please Explain):</label><br />
+  <textarea rows="4" cols="70" name="skills">{{user.application.skills|e}}</textarea>
   </p>
   <p>
-  <label for="involvement">Involvement:</label><br />
-  <textarea name="involvement">{{user.application.involvement|e}}</textarea>
+  <label for="involvement">Other Involvement: Please list all of your activities and the average time commitment per week (i.e. Soccer 3hr/wk)</label><br />
+  <textarea rows="4" cols="70" name="involvement">{{user.application.involvement|e}}</textarea>
   </p>
-  <p>References</p>
+  <p>
+  <label for="why">Why are you interested in volunteering with BounceBack Kids?</label><br />
+  <textarea rows="4" cols="70" name="why">{{user.application.why|e}}</textarea>
+  </p>
+  <p>
+  <label for="how">How did you hear about this volunteer opportunity?:</label><br />
+  <textarea rows="4" cols="70" name="how">{{user.application.how|e}}</textarea>
+  </p>
+
+  <h3>References</h3>
   {% for ref in references %}
   {%- set i = ref.id %}
   <fieldset>
