@@ -196,8 +196,10 @@ def volunteer_signup(request):
             user.save()
             phone.save()
             user.phones.add(phone)
-            if not is_valid_email(user.email):
-              raise forms.ValidationError('%s is not a valid e-mail address.' % email)
+            # validation syntax below is incorrect. Need to change.
+            #if not is_valid_email(user.email):
+            # raise forms.ValidationError('%s is not a valid e-mail address.' % email)
+            user.status = "applying"
             user.save()
             request.session.set_expiry(None)
             request.session['auth_id'] = user.id
