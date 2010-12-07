@@ -1,13 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Bounce Back Kids -- Create An Event{% endblock %}
+{% block head %}
+    <script type="text/javascript" src="/static/javascript/calendar_date_select.js"></script>
+    <link href="/static/css/calendar_date_select/default.css" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block content %}
   <h2>Create an Event</h2>
     <form method="POST">
       <p>
-      <label>Title: <input type="text" name="title" /></label><br />
-      <label>Description: <input type="text" name="description" /></label><br />
-      <label>Event Start Time: <input type="text" name="start" /></label><br />
-      <label>Event End Time: <input type="text" name="end" /></label><br />
+      <label>Title: <input type="text" name="title" value="{{event.title|e}}" /></label><br />
+      <label>Description:<br /><textarea rows="7" cols="60" name="description">{{event.description|e}}</textarea></label><br />
+      <label>Event Start Time: <input type="hidden" id="start" name="start" value="{{event.start|e}}" />
+        <script type="text/javascript">
+          new CalendarDateSelect( $('start'), {embedded:true, time:true, year_range:10} );
+        </script>
+      </label><br />
+      <label>Event End Time: <input type="hidden" id="stop" name="end" value="{{event.end|e}}" />
+        <script type="text/javascript">
+          new CalendarDateSelect( $('stop'), {embedded:true, time:true, year_range:10} );
+        </script>
+      </label><br />
       <input type="submit" value="Create Event" />
       </p>
     </form>

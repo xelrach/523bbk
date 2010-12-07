@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Bounce Back Kids Events{% endblock %}
 {% block content %}
-<p>Add these events to your <a href="http://www.google.com/calendar/render?cid={{url_ical|e}}" target="_blank"><img style="vertical-align:middle" src="http://www.google.com/calendar/images/ext/gc_button1.gif" border=0></a>.</p>
+<p>Subscribe to these events to your <a href="http://www.google.com/calendar/render?cid={{url_ical|e}}" target="_blank"><img style="vertical-align:middle" src="http://www.google.com/calendar/images/ext/gc_button1.gif" border=0></a>.</p>
   <p><a href="/events/ical/">Download the iCalendar file</a></p>
   {% for event in current_event_list %}
   <h3><a href = "/event/{{event.id}}">{{ event.title }}</a></h3>
