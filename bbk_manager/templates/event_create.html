@@ -10,12 +10,12 @@
       <p>
       <label>Title: <input type="text" name="title" value="{{event.title|e}}" /></label><br />
       <label>Description:<br /><textarea rows="7" cols="60" name="description">{{event.description|e}}</textarea></label><br />
-      <label>Event Start Time: <input type="hidden" id="start" name="start" value="{{event.start|e}}" />
+      <label>Event Start Time: <input type="hidden" id="start" name="start" value="{{event.start|empty|e}}" />
         <script type="text/javascript">
           new CalendarDateSelect( $('start'), {embedded:true, time:true, year_range:10} );
         </script>
       </label><br />
-      <label>Event End Time: <input type="hidden" id="stop" name="end" value="{{event.end|e}}" />
+      <label>Event End Time: <input type="hidden" id="stop" name="end" value="{{event.end|empty|e}}" />
         <script type="text/javascript">
           new CalendarDateSelect( $('stop'), {embedded:true, time:true, year_range:10} );
         </script>

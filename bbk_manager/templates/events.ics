@@ -9,8 +9,8 @@ BEGIN:VEVENT
 UID:event_{{event.id}}@bouncebackkids.org
 DTSTART;TZID=America/New_York:{{event.start|ts}}
 DTEND;TZID=America/New_York:{{event.end|ts}}
-SUMMARY:{{event.title|n}}
-DESCRIPTION:{{event.description|n}}
+SUMMARY:{{event.title|ee|n}}
+DESCRIPTION:{{event.description|ee|n}}
 END:VEVENT
 {%- endfor %}
 END:VCALENDAR

@@ -6,6 +6,7 @@ from django.template import Context, loader
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, Http404, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+import jinja2
 from jinja2 import FileSystemLoader, Environment
 from jinja2.filters import contextfilter
 from django.db.models import Avg, Max, Min, Count
@@ -44,6 +45,15 @@ def url(view_name, *args, **kwargs):
                            args=args, kwargs=kwargs)
         except NoReverseMatch:
             return ''
+
+def nl2br(value):
+    return str(jinja2.escape(value)).replace('\n', '<br />').replace('\r','')
+
+def none_to_empty(value):
+    return '' if value is None else value
+
+def escape_escape(text):
+    return str(text).replace('\\', '\\\\')
 
 def escape_quotes(text):
     if text==None:
@@ -125,3 +135,5 @@ env.filters['q'] = escape_quotes
 env.filters['sq'] = escape_single_quotes
 env.filters['n'] = escape_newline
 env.filters['ts'] = make_timestamp
+env.filters['br'] = nl2br
+env.filters['ee'] = escape_escape

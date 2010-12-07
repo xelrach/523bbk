@@ -108,7 +108,7 @@ def event_create(request):
     user = check_login(request)
     event = Event()
     if request.method=="POST":
-        try:	    
+        try:
             event.title = request.POST['title']
     	    event.description = request.POST['description']
             event.start = dateutil.parser.parse(request.POST['start'])
@@ -118,6 +118,10 @@ def event_create(request):
 	except Exception as e:
 	    print e
 	    pass
+    if event.start is None:
+        event.start = datetime.datetime.now()
+    if event.end is None:
+        event.end = datetime.datetime.now()
     return render_to_response('event_create.html', {'event':event,'user':user})
 
 def event_details(request, event_id):
