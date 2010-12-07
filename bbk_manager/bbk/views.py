@@ -1,4 +1,5 @@
 import datetime
+import dateutil.parser
 import re
 from django import forms
 from bbk.models import *
@@ -110,16 +111,20 @@ def event_create(request):
     user = check_login(request)
     event = Event()
     if request.method=="POST":
-        try:	    
+        try:
             event.title = request.POST['title']
     	    event.description = request.POST['description']
-            event.start = request.POST['start']
-            event.end = request.POST['end']    
+            event.start = dateutil.parser.parse(request.POST['start'])
+            event.end = dateutil.parser.parse(request.POST['end'])
             event.save()
             return HttpResponseRedirect(reverse('bbk.views.events'))
 	except Exception as e:
 	    print e
 	    pass
+    if event.start is None:
+        event.start = datetime.datetime.now()
+    if event.end is None:
+        event.end = datetime.datetime.now()
     return render_to_response('event_create.html', {'event':event,'user':user})
 
 def event_details(request, event_id):
@@ -143,8 +148,8 @@ def event_edit(request, event_id):
         try:	    
             event.title = request.POST['title']
     	    event.description = request.POST['description']
-            event.start = request.POST['start']
-            event.end = request.POST['end']    
+            event.start = dateutil.parser.parse(request.POST['start'])
+            event.end = dateutil.parser.parse(request.POST['end'])
             event.save()
             return HttpResponseRedirect(reverse('bbk.views.events'))
 	except Exception as e:
