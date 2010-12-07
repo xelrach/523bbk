@@ -5,12 +5,34 @@
   <form method="POST">
   <ul>
     <li><label>Email: <input type="text" name="email" value="{{ volunteer.email|e }}" /></label></li>
-  <li><label>Status: <select name="status">
-{%- for opt in ["pending","active","coordinator","admin"] %}
+    <li><label>Status: <select name="status">
+    {%- for opt in ["pending","active","coordinator","admin"] %}
     <option{{' selected="selected"' if opt==volunteer.status else ''}}>{{ opt|e }}</option>
-{%- endfor %}
+    {%- endfor %}
     </select></label></li>
-  </ul>
+    <li>
+      <input type ="checkbox" name = "user_checklist" value = "References"
+        {% if checklist.references %}
+	{{"checked"}}
+	{% endif %} 
+      />References<br/>
+      <input type ="checkbox" name = "user_checklist" value = "Confidential Form" 
+        {% if checklist.confidential_form %}
+	{{"checked"}}
+	{% endif %}  
+      />Confidential Form<br/>
+      <input type ="checkbox" name = "user_checklist" value = "Background Check"
+        {% if checklist.background_check %}
+	{{"checked"}}
+	{% endif %} 
+      />Background Check<br/>
+      <input type ="checkbox" name = "user_checklist" value = "Vaccines"
+        {% if checklist.vaccines %}
+	{{"checked"}}
+	{% endif %} 
+      />Vaccines
+    </li>
+    </ul>
   <p><input type="submit" name="submit" value="Save" /><input type="submit" name="submit" value="Return To List" /></p>
   </form>
 {%- endblock %}

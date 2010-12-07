@@ -18,6 +18,13 @@ class Application(models.Model):
     why = models.TextField()
     how = models.TextField()
 
+class Checklist(models.Model):
+    user = models.OneToOneField('User',related_name="checklist")
+    confidential_form = models.BooleanField()
+    background_check = models.BooleanField()
+    vaccines = models.BooleanField()
+    references = models.BooleanField()
+
 class Phone(models.Model):
     number = models.CharField(max_length=20,default="")
     location = models.CharField(max_length=2,default="")

@@ -2,7 +2,12 @@
 {% import "forms.html" as forms %}
 {% block title %}Volunteer Application{% endblock %}
 {% block content %}
+{% if user.status == "pending" %}
+{{ "<span id = 'message'>You're application has been submitted and is currently pending. You will be emailed when the application has
+been reviewed. Thank you.</span>"}}
+{% endif %}
 <h1>Volunteer Application</h1>
+<h3>If you do not wish to submit your application at this time, please hit "Save" and your application will be saved but not submitted.</h3>
 <form method="POST">
   <p>
   <label for="former_names">Former Name(s) (please list any previous names, i.e. maiden or birth names):</label><br />

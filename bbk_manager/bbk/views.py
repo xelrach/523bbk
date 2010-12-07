@@ -84,7 +84,10 @@ def application(request):
             ref.phone = ref.phone
             ref.save()
 
-        if request.POST.get('s') == ('submit'):
+        if request.POST.get('s') == ('Submit'):
+            user.status = "pending"
+            user.save()
+            application.save()
             return HttpResponseRedirect(reverse('bbk.views.pending'))
         else:
             return HttpResponseSeeOther(reverse('bbk.views.application'))
@@ -126,8 +129,12 @@ def event_details(request, event_id):
     if request.method=="POST":
         event.volunteers.add(user)
         event.save()
-        return HttpResponseRedirect(reverse('bbk.views.events'))
+        return HttpResponseRedirect(reverse('bbk.views.signed_up'))
     return render_to_response('event.html', {'event':event, 'user':user})
+
+def signed_up(request):
+    user = check_login(request)
+    return render_to_response('signed_up.html',{'user':user})
 
 def event_edit(request, event_id):
     user = check_login(request)
@@ -196,7 +203,8 @@ def perform_logout(request):
     pass
 
 def pending(request):
-    return render_to_response('pending.html')
+    user = check_login(request)
+    return render_to_response('pending.html', {'user':user})
 
 def send_acception_email(volunteer):
     acception_message_base = "You've been accpeted as a volunteer for BounceBack Kids! Please visit "
@@ -216,6 +224,10 @@ def volunteer(request,volunteer_id):
     volunteer = get_object_or_404(User, id=volunteer_id)
 
     message = ""
+    try:
+        checklist = Checklist.objects.get(user=volunteer.id)
+    except Exception as e:
+        checklist = Checklist(user=volunteer)
     if request.method=="POST":
         if request.POST.get("submit","") != "Save":
             return HttpResponseRedirect(reverse("bbk.views.volunteers"))
@@ -234,9 +246,30 @@ def volunteer(request,volunteer_id):
             volunteer.status = request.POST['status']
             pass
         volunteer.save()
+        post_checklist = request.POST.getlist('user_checklist')
+        try:
+            if "Confidential Form" in post_checklist:   
+                checklist.confidential_form = True
+            else:
+                checklist.confidential_form = False
+            if "Background Check" in post_checklist:   
+                checklist.background_check = True
+            else:
+                checklist.background_check = False
+            if "Vaccines" in post_checklist:   
+                checklist.vaccines = True
+            else:
+                checklist.vaccines = False
+            if "References" in post_checklist:
+                checklist.references = True
+            else:
+                checklist.references = False
+        except Exception as e:
+            print e
+        volunteer.save()
+        checklist.save()
         message = "User Changes Saved"
-#        return HttpResponseRedirect(reverse('bbk.views.volunteers'))
-    return render_to_response('volunteer.html', {'volunteer':volunteer,'user':user,'message':message})
+    return render_to_response('volunteer.html', {'volunteer':volunteer,'user':user,'message':message, 'checklist':checklist})
 
 def volunteer_signup(request):
     user = User()
