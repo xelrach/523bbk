@@ -137,3 +137,4 @@ env.filters['n'] = escape_newline
 env.filters['ts'] = make_timestamp
 env.filters['br'] = nl2br
 env.filters['ee'] = escape_escape
+env.filters['empty'] = none_to_empty

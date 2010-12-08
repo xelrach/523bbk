@@ -118,9 +118,9 @@ def event_create(request):
             event.end = dateutil.parser.parse(request.POST['end'])
             event.save()
             return HttpResponseRedirect(reverse('bbk.views.events'))
-	except Exception as e:
-	    print e
-	    pass
+        except Exception as e:
+            print e
+            pass
     if event.start is None:
         event.start = datetime.datetime.now()
     if event.end is None:
