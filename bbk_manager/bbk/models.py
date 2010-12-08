@@ -1,5 +1,6 @@
 from django.db import models
 import hashlib
+import datetime
 
 class Address(models.Model):
     line1 = models.CharField(max_length=100, default="")
@@ -10,13 +11,13 @@ class Address(models.Model):
 
 class Application(models.Model):
     user = models.OneToOneField('User', related_name="application")
-    former_names = models.CharField(max_length=255)
+    former_names = models.CharField(max_length=255,default="")
     birthdate = models.DateField(null=True)
-    experience = models.TextField()
-    skills = models.TextField()
-    involvement = models.TextField()
-    why = models.TextField()
-    how = models.TextField()
+    experience = models.TextField(default="")
+    skills = models.TextField(default="")
+    involvement = models.TextField(default="")
+    why = models.TextField(default="")
+    how = models.TextField(default="")
 
 class Checklist(models.Model):
     user = models.OneToOneField('User',related_name="checklist")
@@ -80,6 +81,15 @@ class Event(models.Model):
     title = models.CharField(max_length=300)
     start = models.DateTimeField()
     end = models.DateTimeField()
-    description = models.TextField()
-    volunteers = models.ManyToManyField(User)
+    description = models.TextField(default="")
+    message = models.TextField(default="")
+    max_volunteers = models.IntegerField(default=1)
+    volunteers = models.ManyToManyField(User, through="Signup")
 
+class Signup(models.Model):
+    user = models.ForeignKey(User)
+    event = models.ForeignKey(Event)
+    time = models.DateTimeField(default=datetime.datetime.now)
+
+    class Meta:
+        unique_together = (("event", "user"),)

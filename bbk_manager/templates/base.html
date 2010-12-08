@@ -22,7 +22,11 @@
       #message {
         color: red;
         font-size: 150%;
-      }
+			}
+			#user_messages {
+				padding-top:2px;
+				background-color: LightGray;
+			}
     </style>
     {% block head %}{% endblock %}
   </head>
@@ -46,6 +50,13 @@
 	<a href="/login/">Log In</a>
 	{%- endif %}
       </span>
+    </div>
+    <div id="user_messages">
+{%- if user_messages %}
+{%- for message in user_messages %}
+      <div>{{message|e}}</div>
+{%- endfor %}
+{%- endif %}
     </div>
     {%- block content %}{% endblock %}
   </body>

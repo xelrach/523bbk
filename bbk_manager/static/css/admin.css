@@ -9,8 +9,10 @@
 	padding:2px 3px;
 	cursor: pointer;
 }
-/*Fix Me!!!*/
 .tab:hover {
-	background-color:Azure;
-	color:#FFFFFF;
+	background-color:LightGray;
+}
+
+.tab_selected {
+	background-color:LightGray;
 }

@@ -130,12 +130,15 @@ def event_create(request):
 def event_details(request, event_id):
     user = check_login(request)
     event = get_object_or_404(Event, id=event_id)
-    user = User.objects.get(id=request.session['auth_id'])
+    user_messages = None
+    s = None
+    if user:
+        s = Signup.objects.get(user=user,event=event)
     if request.method=="POST":
-        event.volunteers.add(user)
-        event.save()
-        return HttpResponseRedirect(reverse('bbk.views.signed_up'))
-    return render_to_response('event.html', {'event':event, 'user':user})
+        s = Signup(event=event, user=user)
+        s.save()
+        user_messages = ["You Have Signed Up For This Event"]
+    return render_to_response('event.html', {'event':event, 'user':user, 'user_messages':user_messages, 'signup':s})
 
 def signed_up(request):
     user = check_login(request)
