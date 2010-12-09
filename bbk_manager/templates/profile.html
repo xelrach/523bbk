@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{%- block title %}Bounce Back Kids Profile{% endblock %}
+{%- block content %}
+<div>
+<h3>{{user.first_name }} {{user.last_name}}
+  <ul>
+    <li>Contact: {{ user.email }}</li>
+  </ul>
+</div>
+{%- endblock %}

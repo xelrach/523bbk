@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Bounce Back Kids Read Application{% endblock %}
+{% block content %}
+  <h2>{{volunteer.first_name}} {{ volunteer.last_name}}'s Application:</h2>
+<ul>
+<li>Former names: {{application.former_names}}</li>
+<li>Date of birth: {{application.birthdate}}</li>
+<li>Experience: {{application.experience}}</li>
+<li>Skills: {{application.skills}}</li>
+<li>Involvement: {{application.involvement}}</li>
+<li>Why they are volunteering: {{application.why}}</li>
+<li>How they heard about BBK: {{application.how}}</li>
+</ul>
+<a href = "/volunteer/{{volunteer.id}}/">Back to volunteer details</a>
+{% endblock %}

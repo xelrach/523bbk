@@ -6,17 +6,24 @@ from bbk.models import *
 from django_utils import *
 from django.core.mail import EmailMultiAlternatives
 
+def home(request):
+    return render_to_response("home.html")
+
+def profile(request):
+    user = check_login(request)
+    return render_to_response("profile.html",{'user':user})
+
 def admin(request):
     user = check_login(request)
     if not user or user.status != "admin":
-        return HttpResponseRedirect(reverse('bbk.views.events'))
+        return HttpResponseRedirect(reverse('bbk.views.home'))
     return render_to_response("admin.html", {'user':user})
 
 def application(request):
     user = check_login(request)
     n_references = 3
     if not user:
-        return HttpResponseRedirect(reverse('bbk.views.volunteer_signup'))
+        return HttpResponseRedirect(reverse('bbk.views.home'))
     if user.status=="active" or user.status=="admin":
         return HttpResponseRedirect(reverse('bbk.views.events'))
 
@@ -109,6 +116,8 @@ def events(request):
 
 def event_create(request):
     user = check_login(request)
+    if not user or user.status != "admin":
+        return HttpResponseRedirect(reverse('bbk.views.home'))
     event = Event()
     if request.method=="POST":
         try:
@@ -117,7 +126,7 @@ def event_create(request):
             event.start = dateutil.parser.parse(request.POST['start'])
             event.end = dateutil.parser.parse(request.POST['end'])
             event.save()
-            return HttpResponseRedirect(reverse('bbk.views.events'))
+            return HttpResponseRedirect(reverse('bbk.views.events_admin'))
         except Exception as e:
             print e
             pass
@@ -146,6 +155,8 @@ def signed_up(request):
 
 def event_edit(request, event_id):
     user = check_login(request)
+    if not user or user.status != "admin":
+        return HttpResponseRedirect(reverse('bbk.views.home'))
     event = get_object_or_404(Event, id=event_id)
     if request.method=="POST":
         try:	    
@@ -154,7 +165,7 @@ def event_edit(request, event_id):
             event.start = dateutil.parser.parse(request.POST['start'])
             event.end = dateutil.parser.parse(request.POST['end'])
             event.save()
-            return HttpResponseRedirect(reverse('bbk.views.events'))
+            return HttpResponseRedirect(reverse('bbk.views.events_admin'))
 	except Exception as e:
 	    print e
 	    pass
@@ -169,17 +180,23 @@ def events_ical(request):
 
 def events_admin(request):
     user = check_login(request)
+    if not user or user.status != "admin":
+        return HttpResponseRedirect(reverse('bbk.views.home'))
     current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
     return render_to_response('events_admin.html', {'current_event_list':current_event_list, 'user':user})
 
 def events_user(request):
     user = check_login(request)
+    if not user:
+        return HttpResponseRedirect(reverse('bbk.views.home'))
     user_id = user.id
     user_events = Event.objects.filter(volunteers=user_id)
     return render_to_response('events_user.html',{'user_events':user_events,'user':user})
 
 def event_admin_details(request, event_id):
     user = check_login(request)
+    if not user or user.status != "admin":
+        return HttpResponseRedirect(reverse('bbk.views.home'))
     event = get_object_or_404(Event, id=event_id)
     event_volunteers = event.volunteers.all()
     length = len(event_volunteers)
@@ -225,10 +242,18 @@ def send_acception_email(volunteer):
     msg.attach_alternative(acception_message_html, "text/html")
     msg.send()
 
+def read_application(request,volunteer_id): 
+    user = check_login(request)
+    if not user or user.status != "admin":
+        return HttpResponseRedirect(reverse('bbk.views.home'))
+    volunteer = get_object_or_404(User, id=volunteer_id)
+    application = Application.objects.get(user=volunteer.id)
+    return render_to_response("read_application.html",{'application':application, 'volunteer':volunteer, 'user':user})
+
 def volunteer(request,volunteer_id):
     user = check_login(request)
     if not user or user.status != "admin":
-        return HttpResponseRedirect(reverse('bbk.views.events'))
+        return HttpResponseRedirect(reverse('bbk.views.home'))
     volunteer = get_object_or_404(User, id=volunteer_id)
 
     message = ""
@@ -312,7 +337,7 @@ def volunteer_signup(request):
 def volunteers(request):
     user = check_login(request)
     if not user or user.status != "admin":
-        return HttpResponseRedirect(reverse('bbk.views.events'))
+        return HttpResponseRedirect(reverse('bbk.views.home'))
     return render_to_response("volunteers.html", {"user":user})
 
 def volunteers_xml(request, status):

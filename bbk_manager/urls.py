@@ -4,13 +4,15 @@ import os
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 urlpatterns = patterns('bbk.views',
-    (r'^$', 'events'),
+    (r'^$', 'home'),
     (r'^admin/$', 'admin'),
     (r'^application/$', 'application'),
+    (r'^read_application/(?P<volunteer_id>\d+)/$', 'read_application'),
     (r'^login/$', 'login'),
     (r'^logout/$', 'logout'),
     (r'^pending/$', 'pending'),
     (r'^signed_up/$', 'signed_up'),
+    (r'^profile/$', 'profile'),
     (r'^volunteer_signup/$', 'volunteer_signup'),
     (r'^volunteer/(?P<volunteer_id>\d+)/$', 'volunteer'),
     (r'^volunteers/$', 'volunteers'),
