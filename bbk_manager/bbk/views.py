@@ -142,7 +142,10 @@ def event_details(request, event_id):
     user_messages = None
     s = None
     if user:
-        s = Signup.objects.get(user=user,event=event)
+        try:
+            s = Signup.objects.get(user=user,event=event)
+        except:
+            pass
     if request.method=="POST":
         s = Signup(event=event, user=user)
         s.save()
