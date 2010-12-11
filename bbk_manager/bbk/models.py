@@ -62,7 +62,7 @@ class User(models.Model):
     last_name = models.CharField(max_length=100)
     title = models.CharField(max_length=10)
     address = models.ForeignKey(Address,null=True)
-    email = models.CharField(max_length=100)
+    email = models.CharField(max_length=100,unique=True)
     phones = models.ManyToManyField(Phone)
     status = models.CharField(max_length=25)
     sha256 = models.CharField(max_length=64)

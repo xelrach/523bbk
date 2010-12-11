@@ -33,12 +33,12 @@
   <body>
     <div id="login_bar">
       <span id = "admin_nav">
-	{% if user.status == "admin" %}
+	{% if user and user.status == "admin" %}
 	<a href = "/admin/">Admin Home</a>
 	{% endif %}
       </span>
       <span id = "user_nav">
-	{% if user.status == "active" %}
+	{% if user and user.status == "active" %}
 	<a href = "/events/user/">My Upcoming Events</a>
 	<a href = "/events/">Events Calendar</a>
 	<a href = "/profile/">My Info</a>

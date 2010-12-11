@@ -6,6 +6,8 @@ from bbk.models import *
 from django_utils import *
 from django.core.mail import EmailMultiAlternatives
 
+NOTIFICATION_EMAIL_ADDRESS = "admin@bouncebackkids.org"
+
 def home(request):
     return render_to_response("home.html")
 
@@ -96,6 +98,7 @@ def application(request):
             user.status = "pending"
             user.save()
             application.save()
+            send_new_volunteer_email(request, user)
             return HttpResponseRedirect(reverse('bbk.views.pending'))
         else:
             return HttpResponseSeeOther(reverse('bbk.views.application'))
@@ -176,7 +179,6 @@ def event_edit(request, event_id):
 
 def events_ical(request):
     current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
-    print current_event_list
     response = render_to_response('events.ics', {'events':current_event_list}, "text/calendar")
     response['Content-Disposition'] = 'attachment; filename="BounceBack Kids.ics"'
     return response
@@ -226,6 +228,26 @@ def logout(request):
     perform_logout(request)
     return HttpResponseRedirect(reverse('bbk.views.events'))
 
+def password_reset(request):
+    import string
+    import random
+    user_messages = None
+    if request.method=="POST":
+        try:
+            user = User.objects.get(email=request.POST['email'])
+            pw = ""
+            for i in xrange(8):
+                pw += string.uppercase[random.randint(0,25)]
+            user.set_password(pw)
+            user.save()
+            send_password_reset_email(request, request.POST['email'], pw)
+        except Exception as e:
+            print e
+            pass
+        user_messages = ["The password for " + request.POST['email'] + " has been rest. Please check your email for the new password."]
+        pass
+    return render_to_response('password_reset.html', {'user_messages':user_messages})
+
 def perform_logout(request):
     request.session.flush()
     pass
@@ -234,15 +256,40 @@ def pending(request):
     user = check_login(request)
     return render_to_response('pending.html', {'user':user})
 
-def send_acception_email(volunteer):
-    acception_message_base = "You've been accpeted as a volunteer for BounceBack Kids! Please visit "
-    events_url = reverse('bbk.views.events')
+def send_acception_email(request, volunteer):
+    acception_message_base = "You've been accepted as a volunteer for BounceBack Kids! Please visit "
+    events_url = "http://" + request.get_host() + reverse('bbk.views.login')
+    print events_url
     acception_message_txt = acception_message_base + events_url
     acception_message_html = acception_message_base + '<a href="' + events_url + '">' + events_url + "</a>"
-    subject, from_email, to = "BounceBack Kids Application", "admin@bouncebackkids.org", [volunteer.email]
+    subject, from_email, to = "BounceBack Kids Application", NOTIFICATION_EMAIL_ADDRESS, [volunteer.email]
 
     msg = EmailMultiAlternatives(subject, acception_message_txt, from_email, to)
     msg.attach_alternative(acception_message_html, "text/html")
+    msg.send()
+
+def send_new_volunteer_email(request, user):
+    message_base = user.first_name + " " + user.last_name + " has submitted his/her application. Read there application "
+    url = "http://" + request.get_host() + reverse('bbk.views.read_application', kwargs={'volunteer_id':user.id})
+    message_text = message_base + "here: " + url
+    message_html = message_base + '<a href=' + url + '">here</a>'
+    admins = User.objects.filter(status='admin')
+    subject, from_email, to = "BounceBack Kids -- New Application", NOTIFICATION_EMAIL_ADDRESS, admins
+
+    msg = EmailMultiAlternatives(subject, message_txt, from_email, to)
+    msg.attach_alternative(message_html, "text/html")
+    msg.send()
+
+def send_password_reset_email(request, address, pw):
+    message_base = "Your BounceBack Kids password for " + address +" has been reset to " + pw + " You can change your password by going to 'Account' after logging in at "
+    url = "http://" + request.get_host() + reverse('bbk.views.login')
+    print url
+    message_txt = message_base + url
+    message_html = message_base + '<a href="' + url + '">' + url + '</a>'
+    subject, from_email, to = "BounceBack Kids Password Reset", NOTIFICATION_EMAIL_ADDRESS, [address]
+
+    msg = EmailMultiAlternatives(subject, message_txt, from_email, to)
+    msg.attach_alternative(message_html, "text/html")
     msg.send()
 
 def read_application(request,volunteer_id): 
@@ -305,7 +352,7 @@ def volunteer(request,volunteer_id):
         volunteer.save()
         checklist.save()
         message = "User Changes Saved"
-    return render_to_response('volunteer.html', {'volunteer':volunteer,'user':user,'message':message, 'checklist':checklist})
+    return render_to_response('volunteer.html', {'volunteer':volunteer,'user':user,'message':message, 'checklist':checklist, 'application_url':reverse('bbk.views.read_application',kwargs={'volunteer_id':volunteer.id}) })
 
 def volunteer_signup(request):
     user = User()
