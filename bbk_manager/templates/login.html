@@ -1,8 +1,6 @@
-<html>
-  <head>
-    <title>Log In</title>
-  </head>
-  <body>
+{% extends 'base.html' %}
+{% block title %}BounceBack Kids Log In{% endblock %}
+{% block content %}
     <form method="POST">
       {% if message %}
       <p>{{message}}</p>
@@ -12,6 +10,7 @@
         <label for="password">Password: </label><input type="password" name="password" /><br />
         <input type="submit" value="Log In" />
       </p>
-     </form>
-   </body>
- </html>
+		</form>
+		<p>If you have forgotten your password <a href="{{reverse('bbk.views.password_reset')}}">go here</a> to reset it.</p>
+		<p>If you are not a volunteer, <a href="{{reverse('bbk.views.volunteer_signup')}}">Sign Up!</a></p>
+{% endblock %}

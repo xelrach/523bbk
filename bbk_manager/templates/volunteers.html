@@ -38,28 +38,29 @@
 			}
 
       document.observe("dom:loaded", function() {
-          var all_url = "/volunteers/all/";
-          var active_url = "/volunteers/active/";
-          var pending_url = "/volunteers/pending/";
+          var base_url = "{{base_url}}";
+          var all_url = base_url + "?status=all";
+          var active_url = base_url + "?status=active";
+          var pending_url = base_url + "?status=pending";
 
 					var body = $('app');
 					var tabs = document.createElement('div');
 					var list = document.createElement('ul');
 					body.appendChild(tabs);
 					body.appendChild(list);
-					/* Make tabs */
-          var div_all = make_tab("All");
+          /* Make tabs */
+           var div_all = make_tab("All");
           div_all.observe('click', function(evt) {set_list(list, all_url, tabs, div_all);});
           var div_active = make_tab("Active");
           div_active.observe('click', function(evt) {set_list(list, active_url, tabs, div_active);});
           var div_pending = make_tab("Pending");
           div_pending.observe('click', function(evt) {set_list(list, pending_url, tabs, div_pending);});
 
-					tabs.appendChild(div_all);
+ 					tabs.appendChild(div_all);
 					tabs.appendChild(div_active);
 					tabs.appendChild(div_pending);
 
-					set_list(list, all_url, tabs, div_all);
+ 					set_list(list, all_url, tabs, div_all);
 			});
     </script>
 {%- endblock %}

@@ -114,8 +114,8 @@ def check_login(request):
 def events(request):
     user = check_login(request)
     current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
-    url_ical = request.build_absolute_uri(reverse('bbk.views.events_ical'))
-    return render_to_response('events.html', {'current_event_list':current_event_list,'user':user,'url_ical':url_ical})
+    url_ical = request.get_host()+reverse('bbk.views.events_ical')
+    return render_to_response('events.html', {'current_event_list':current_event_list,'reverse':reverse,'user':user,'url_ical':url_ical})
 
 def event_create(request):
     user = check_login(request)
@@ -221,8 +221,8 @@ def login(request):
             if user.status=="admin":
                 return HttpResponseRedirect(reverse('bbk.views.admin'))
         except Exception as e:
-            return render_to_response('login.html', {'message':"Login Failed"})
-    return render_to_response('login.html')
+            return render_to_response('login.html', {'message':"Login Failed",'reverse':reverse})
+    return render_to_response('login.html',{'reverse':reverse})
 
 def logout(request):
     perform_logout(request)
@@ -259,7 +259,6 @@ def pending(request):
 def send_acception_email(request, volunteer):
     acception_message_base = "You've been accepted as a volunteer for BounceBack Kids! Please visit "
     events_url = "http://" + request.get_host() + reverse('bbk.views.login')
-    print events_url
     acception_message_txt = acception_message_base + events_url
     acception_message_html = acception_message_base + '<a href="' + events_url + '">' + events_url + "</a>"
     subject, from_email, to = "BounceBack Kids Application", NOTIFICATION_EMAIL_ADDRESS, [volunteer.email]
@@ -269,12 +268,12 @@ def send_acception_email(request, volunteer):
     msg.send()
 
 def send_new_volunteer_email(request, user):
-    message_base = user.first_name + " " + user.last_name + " has submitted his/her application. Read there application "
+    message_base = user.first_name + " " + user.last_name + " has submitted his/her application. Read their application "
     url = "http://" + request.get_host() + reverse('bbk.views.read_application', kwargs={'volunteer_id':user.id})
-    message_text = message_base + "here: " + url
+    message_txt = message_base + "here: " + url
     message_html = message_base + '<a href=' + url + '">here</a>'
     admins = User.objects.filter(status='admin')
-    subject, from_email, to = "BounceBack Kids -- New Application", NOTIFICATION_EMAIL_ADDRESS, admins
+    subject, from_email, to = "BounceBack Kids -- New Application", NOTIFICATION_EMAIL_ADDRESS, [admin.email for admin in admins]
 
     msg = EmailMultiAlternatives(subject, message_txt, from_email, to)
     msg.attach_alternative(message_html, "text/html")
@@ -283,7 +282,6 @@ def send_new_volunteer_email(request, user):
 def send_password_reset_email(request, address, pw):
     message_base = "Your BounceBack Kids password for " + address +" has been reset to " + pw + " You can change your password by going to 'Account' after logging in at "
     url = "http://" + request.get_host() + reverse('bbk.views.login')
-    print url
     message_txt = message_base + url
     message_html = message_base + '<a href="' + url + '">' + url + '</a>'
     subject, from_email, to = "BounceBack Kids Password Reset", NOTIFICATION_EMAIL_ADDRESS, [address]
@@ -388,14 +386,15 @@ def volunteers(request):
     user = check_login(request)
     if not user or user.status != "admin":
         return HttpResponseRedirect(reverse('bbk.views.home'))
-    return render_to_response("volunteers.html", {"user":user})
+    return render_to_response("volunteers.html", {"user":user,"base_url":reverse('bbk.views.volunteers_xml')})
 
-def volunteers_xml(request, status):
+def volunteers_xml(request):
     user = check_login(request)
     if not user or user.status != "admin":
         raise Http404
     vols = User.objects
-    if status == "all":
+    status = request.GET.get('status')
+    if status == "all" or status is None:
         vols = vols.filter(status__in=["active","admin","coordinator","pending"])
     elif status == "active":
         vols = vols.filter(status__in=["active","admin","coordinator"])

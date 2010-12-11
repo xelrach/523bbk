@@ -17,7 +17,7 @@ urlpatterns = patterns('bbk.views',
     (r'^volunteer_signup/$', 'volunteer_signup'),
     (r'^volunteer/(?P<volunteer_id>\d+)/$', 'volunteer'),
     (r'^volunteers/$', 'volunteers'),
-    (r'^volunteers/(?P<status>\w+)/$', 'volunteers_xml'),
+    (r'^volunteers/xml/$', 'volunteers_xml'),
 )
 #URLs for events
 urlpatterns += patterns('bbk.views',
