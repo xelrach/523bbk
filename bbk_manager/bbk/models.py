@@ -49,6 +49,11 @@ class Phone(models.Model):
     def __unicode__(self):
         return self.get_number()
 
+    def save(self,*args,**kwargs):
+        import re
+        self.number = re.sub(r'[^\d]','',self.number)
+        super(Phone,self).save(*args,**kwargs)
+
 class Reference(models.Model):
     name = models.CharField(max_length=100, default="")
     email = models.CharField(max_length=100, default="")

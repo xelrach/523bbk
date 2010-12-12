@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}BounceBack Kids - Account Management{% endblock %}
+{% block content %}
+<form method="POST">
+  <label>First Name: <input type="text" name="first_name" value="{{user.first_name|e}}" /></label><br />
+  <label>Last Name: <input type="text" name="last_name" value="{{user.last_name|e}}" /></label><br />
+  {% for phone in phones %}
+  <label>Phone: <input type="text" name="phone[{{phone.id}}]" value="{{phone.get_number()}}" /></label><br />
+  {% endfor %}
+  <hr />
+  <p>Optionally Change Password</p>
+  <label>New Password: <input type="password" name="password1" /></label><br />
+  <label>Confirm Password: <input type="password" name="password2" /></label><br />
+  <br />
+  <input type="submit" name="submit" value="Update" />
+</form>
+{% endblock %}

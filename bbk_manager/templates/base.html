@@ -9,12 +9,14 @@
         background-color: #00687F;
         color: white;
         text-align: right;
+        margin-bottom: 2px;
       }
       #login_bar a {
         color: white;
       }
       #admin_nav{
         float: left;
+        margin-right: 2px;
       }
       #user_nav {
         float: left;
@@ -32,19 +34,19 @@
   </head>
   <body>
     <div id="login_bar">
-      <span id = "admin_nav">
+      <span id="admin_nav">
 	{% if user and user.status == "admin" %}
-	<a href = "/admin/">Admin Home</a>
+	<a href = "/admin/">Admin Home</a> | 
 	{% endif %}
       </span>
-      <span id = "user_nav">
-	{% if user and user.status == "active" %}
-	<a href = "/events/user/">My Upcoming Events</a>
-	<a href = "/events/">Events Calendar</a>
-	<a href = "/profile/">My Info</a>
+      <span id="user_nav">
+	{% if user and user.status in ["active","coordinator","admin"] %}
+	<a href = "/events/user/">My Upcoming Events</a> | 
+	<a href = "/events/">Events Calendar</a> | 
+	<a href = "/account/">Account</a>
 	{% endif %}
       </span>
-      <span id = "login_info">
+      <span id="login_info">
 	{%- if user %}
 	{{user.first_name|e}} {{user.last_name|e}} | <a href="/logout/">Log Out</a>
 	{%- else %}
@@ -52,13 +54,13 @@
 	{%- endif %}
       </span>
     </div>
+{%- if user_messages and user_messages|length>0 %}
     <div id="user_messages">
-{%- if user_messages %}
 {%- for message in user_messages %}
       <div>{{message|e}}</div>
 {%- endfor %}
-{%- endif %}
     </div>
+{%- endif %}
     {%- block content %}{% endblock %}
   </body>
 </html>

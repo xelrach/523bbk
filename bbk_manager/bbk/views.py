@@ -15,6 +15,48 @@ def profile(request):
     user = check_login(request)
     return render_to_response("profile.html",{'user':user})
 
+def account(request):
+    user = check_login(request)
+    if not user:
+        return HttpResponseRedirect(reverse('bbk.views.home'))
+    user_messages = []
+    if request.method=="POST":
+        if "first_name" in request.POST and len(request.POST['first_name'])>0:
+            user.first_name = request.POST['first_name']
+        if "last_name" in request.POST and len(request.POST['last_name'])>0:
+            user.last_name = request.POST['last_name']
+        if "password1" in request.POST and len(request.POST['password1'])>0:
+            if request.POST['password1']==request.POST['password2']:
+                user.set_password(request.POST['password1'])
+                user_messages.append("Changes Saved")
+                user.save()
+            else:
+                user_messages.append("Passwords Do Not Match")
+        else:
+            user_messages.append("Changes Saved")
+            user.save()
+        for key in request.POST:
+            match = re.match('phone\[(-?\d+)\]', key)
+            if match:
+                phone_id = int(match.group(1))
+                if phone_id>0:
+                    try:
+                        phone = Phone.objects.get(id=phone_id)
+                        phone.number = request.POST[key]
+                        phone.save()
+                    except Exception as e:
+                        pass
+                else:
+                    phone = Phone(user=user,number=request.POST[key])
+                    phone.save()
+                pass
+            pass
+        pass
+    phones = user.phones.all()
+    if len(phones)<1:
+        phones = [Phone(id=-1)]
+    return render_to_response('account.html', {'user':user,'phones':phones,'user_messages':user_messages})
+
 def admin(request):
     user = check_login(request)
     if not user or user.status != "admin":
@@ -361,13 +403,20 @@ def volunteer(request,volunteer_id):
 def volunteer_signup(request):
     user = User()
     user.phone = ''
-    if request.POST and len(request.POST)>0:
+    user_messages = []
+    if request.method=="POST":
         perform_logout(request)
         try:
             user.first_name = request.POST['first_name']
             user.last_name = request.POST['last_name']
             user.email = request.POST['email']
-            if request.POST['pwd1']<>request.POST['pwd2']:
+            user.phone = request.POST['phone']
+            match = re.match(r'.+@.+', request.POST['email'])
+            if not match:
+                user_messages.append("You must include an email")
+                raise Exception
+            if len(request.POST['pwd1'])<1 or request.POST['pwd1']<>request.POST['pwd2']:
+                user_messages.append("The passwords do not match")
                 raise Exception
             user.set_password(request.POST['pwd1'])
             phone = Phone()
@@ -386,7 +435,7 @@ def volunteer_signup(request):
         except Exception as e:
             pass
         pass
-    return render_to_response('volunteer_signup.html', {'user':user})
+    return render_to_response('volunteer_signup.html', {'volunteer':user,'user_messages':user_messages})
 
 def volunteers(request):
     user = check_login(request)

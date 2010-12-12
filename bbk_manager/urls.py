@@ -6,6 +6,7 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 urlpatterns = patterns('bbk.views',
     (r'^$', 'home'),
     (r'^admin/$', 'admin'),
+    (r'^account/$', 'account'),
     (r'^application/$', 'application'),
     (r'^read_application/(?P<volunteer_id>\d+)/$', 'read_application'),
     (r'^login/$', 'login'),
