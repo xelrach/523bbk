@@ -128,6 +128,7 @@ def event_create(request):
     	    event.description = request.POST['description']
             event.start = dateutil.parser.parse(request.POST['start'])
             event.end = dateutil.parser.parse(request.POST['end'])
+            event.max_volunteers = request.POST['max_volunteers']
             event.save()
             return HttpResponseRedirect(reverse('bbk.views.events_admin'))
         except Exception as e:
@@ -142,6 +143,10 @@ def event_create(request):
 def event_details(request, event_id):
     user = check_login(request)
     event = get_object_or_404(Event, id=event_id)
+    event_volunteers = event.volunteers.all()
+    number_of_volunteers = len(event_volunteers)
+    max_number_of_volunteers = event.max_volunteers
+    max_full = number_of_volunteers >= max_number_of_volunteers
     user_messages = None
     s = None
     if user:
@@ -153,7 +158,7 @@ def event_details(request, event_id):
         s = Signup(event=event, user=user)
         s.save()
         user_messages = ["You Have Signed Up For This Event"]
-    return render_to_response('event.html', {'event':event, 'user':user, 'user_messages':user_messages, 'signup':s})
+    return render_to_response('event.html', {'event':event, 'user':user, 'user_messages':user_messages, 'signup':s, 'max_full':max_full})
 
 def signed_up(request):
     user = check_login(request)
@@ -170,6 +175,7 @@ def event_edit(request, event_id):
     	    event.description = request.POST['description']
             event.start = dateutil.parser.parse(request.POST['start'])
             event.end = dateutil.parser.parse(request.POST['end'])
+            event.max_volunteers = request.POST['max_volunteers']
             event.save()
             return HttpResponseRedirect(reverse('bbk.views.events_admin'))
 	except Exception as e:

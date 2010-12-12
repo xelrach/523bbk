@@ -8,7 +8,7 @@
     <li>{{ event.start }}</li>
     <li>{{ event.end }}</li>
    </ul>
-  List of volunteers ({{length}} total):   
+  List of volunteers ({{length}} of {{event.max_volunteers}} maximum):   
    <ul>
    {% for volunteer in event_volunteers %}
     <li> {{volunteer.first_name + " " +  volunteer.last_name}}</li>

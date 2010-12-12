@@ -83,7 +83,7 @@ class Event(models.Model):
     end = models.DateTimeField()
     description = models.TextField(default="")
     message = models.TextField(default="")
-    max_volunteers = models.IntegerField(default=1)
+    max_volunteers = models.IntegerField(default=10)
     volunteers = models.ManyToManyField(User, through="Signup")
 
 class Signup(models.Model):
