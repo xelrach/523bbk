@@ -16,8 +16,8 @@
 {%- if user and signup %}
 	<p>You are signed-up for this event.</p>
 {%- endif %}
-{% if max_full and not signup %}
-{{"Sorry this event is at capacity for volunteers. Please look at our calendar for more oppurtunities."}}
+{% if user and max_full and not signup %}
+{{"Sorry this event is at capacity for volunteers. Please look at our calendar for more opportunities."}}
 {{"<br/>"}}
 {% endif %}
   <br/><a href = "/events/">Back to events</a>
