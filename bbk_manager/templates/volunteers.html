@@ -11,8 +11,11 @@
             try{
 						list.innerHTML = "";
 						vols = transport.responseXML.documentElement;
-            for (var i=0; i<vols.children.length; i++) {
-              var vol = vols.children[i];
+            for (var i=0; i<vols.childNodes.length; i++) {
+							var vol = vols.childNodes[i];
+							if (vol.nodeType!=1) {
+								continue;
+							}
               var li = document.createElement('li');
               var a = document.createElement('a');
               a.setAttribute("href", "/volunteer/" + vol.getAttribute("volunteer_id") + "/");
