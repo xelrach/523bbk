@@ -202,6 +202,10 @@ def event_details(request, event_id):
         user_messages = ["You Have Signed Up For This Event"]
     return render_to_response('event.html', {'event':event, 'user':user, 'user_messages':user_messages, 'signup':s, 'max_full':max_full})
 
+def faq(request):
+    user = check_login(request)
+    return render_to_response('faq.html',{'user':user})
+
 def signed_up(request):
     user = check_login(request)
     return render_to_response('signed_up.html',{'user':user})

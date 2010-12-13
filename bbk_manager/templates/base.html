@@ -50,8 +50,10 @@
 	{%- if user %}
 	{{user.first_name|e}} {{user.last_name|e}} | <a href="/logout/">Log Out</a>
 	{%- else %}
+	<a href="/volunteer_signup/">Sign Up</a> |
 	<a href="/login/">Log In</a>
 	{%- endif %}
+	| <a href="/faq/">FAQ</a>
       </span>
     </div>
 {%- if user_messages and user_messages|length>0 %}
