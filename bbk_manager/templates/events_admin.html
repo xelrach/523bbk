@@ -1,14 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Bounce Back Kids Admin{% endblock %}
 {% block content %}
-  <h4><a href = "/event/create">Create an event<a></h4>
+	<h4><a href = "/event/create">Create an event</a></h4>
+	<div style="max-width:1000px;">
   {% for event in current_event_list %}
-  <h3><a href = "/event/admin/{{event.id}}">{{ event.title }}</a></h3>
-  <ul>
-  <li>{{ event.description }}</a></li>
-  <li>{{ event.start }}</a></li>
-  <li>{{ event.end }}</a></li>
-  </ul>
+  <h3><a href = "/event/admin/{{event.id}}">{{ event.title|e }}</a></h3>
+  <p>Start: {{ event.start|dt }}<br />
+  End: {{ event.end|dt }}</p>
+  <p>{{ event.description|br }}</p>
   {% endfor %}
-  </ul> 
+  </div> 
 {%- endblock %}

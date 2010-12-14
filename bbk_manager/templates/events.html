@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Bounce Back Kids Events{% endblock %}
 {% block content %}
-<p>Subscribe to these events in your <a href="http://www.google.com/calendar/render?cid=http://{{url_ical|e}}" target="_blank"><img style="vertical-align:middle" src="http://www.google.com/calendar/images/ext/gc_button1.gif" border=0></a>.</p>
-<p>Subscribe using another <a href="webcal://{{url_ical|e}}">calendar program</a>.</p>
+	<p>Subscribe to these events in your <a href="http://www.google.com/calendar/render?cid=http://{{url_ical|e}}" target="_blank"><img style="vertical-align:middle" src="http://www.google.com/calendar/images/ext/gc_button1.gif" border=0></a>.</p>
+	<p>Subscribe using another <a href="webcal://{{url_ical|e}}">calendar program</a>.</p>
+	<div style="max-width:1000px;">
   {% for event in current_event_list %}
-	<h3><a href="{{reverse('bbk.views.event_details',kwargs={'event_id':event.id})}}">{{ event.title|e }}</a></h3>
-  <ul>
-  <li>{{ event.description|br }}</a></li>
-  <li>{{ event.start|e }}</a></li>
-  <li>{{ event.end|e }}</a></li>
-  </ul>
+  <h3><a href="{{reverse('bbk.views.event_details',kwargs={'event_id':event.id})}}">{{ event.title|e }}</a></h3>
+  <p>Start: {{ event.start|dt }}<br />
+  End: {{ event.end|dt }}</p>
+  <p>{{ event.description|br }}</p>
   {% endfor %}
-  </ul> 
+  </div> 
 {%- endblock %}

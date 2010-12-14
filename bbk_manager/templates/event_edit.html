@@ -1,13 +1,23 @@
 {% extends "base.html" %}
 {% block title %}Bounce Back Kids -- Edit Event{% endblock %}
+{% block head %}
+    <script type="text/javascript" src="/static/javascript/calendar_date_select.js"></script>
+    <link href="/static/css/calendar_date_select/default.css" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block content %}
   <h2>Edit {{event.title|e}} </h2>
     <form method="POST">
       <p>
       <label>Title: <input type="text" name="title" value="{{event.title|e}}" /></label><br />
-      <label>Description: <input type="text" name="description" value="{{event.description|e}}" /></label><br />
-      <label>Event Start Time: <input type="text" name="start" value="{{event.start|e}}" /></label><br />
-      <label>Event End Time: <input type="text" name="end" value="{{event.end|e}}" /></label><br />
+      <label>Description:<br /><textarea cols="60" rows="10" name="description">{{event.description|e}}</textarea></label><br />
+      <label>Event Start Time: <input type="hidden" id="start" name="start" value="{{event.start|empty|e}}" /></label><br />
+      <script type="text/javascript">
+				new CalendarDateSelect( $('start'), {embedded:true, time:true, year_range:10 {% if event.start %},default_time: new Date("{{event.start|dt}}"){% endif %} } );
+      </script>
+      <label>Event End Time: <input type="hidden" id="end" name="end" value="{{event.end|empty|e}}" /></label><br />
+      <script type="text/javascript">
+				new CalendarDateSelect( $('end'), {embedded:true, time:true, year_range:10 {% if event.end %},default_time: new Date("{{event.end|dt}}"){% endif %} });
+      </script>
       <label>Maximum number of volunteers: <input type="text" name="max_volunteers" value="{{event.max_volunteers|e}}"/></label><br/>
       <input type="submit" value="Edit Event"/>
       </p>
