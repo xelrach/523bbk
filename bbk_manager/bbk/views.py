@@ -156,6 +156,7 @@ def check_login(request):
 def events(request):
     user = check_login(request)
     current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
+    current_event_list = current_event_list.order_by('start')
     url_ical = request.get_host()+reverse('bbk.views.events_ical')
     return render_to_response('events.html', {'current_event_list':current_event_list,'reverse':reverse,'user':user,'url_ical':url_ical})
 
@@ -240,6 +241,7 @@ def events_admin(request):
     if not user or user.status != "admin":
         return HttpResponseRedirect(reverse('bbk.views.home'))
     current_event_list = Event.objects.filter(end__gt=datetime.datetime.now())
+    current_event_list = current_event_list.order_by('start')
     return render_to_response('events_admin.html', {'current_event_list':current_event_list, 'user':user})
 
 def events_user(request):
@@ -248,6 +250,7 @@ def events_user(request):
         return HttpResponseRedirect(reverse('bbk.views.home'))
     user_id = user.id
     user_events = Event.objects.filter(volunteers=user_id)
+    user_events = user_events.order_by('start')
     return render_to_response('events_user.html',{'user_events':user_events,'user':user})
 
 def event_admin_details(request, event_id):

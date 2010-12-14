@@ -5,6 +5,19 @@
     <title>{% block title %}Bounce Back Kids{% endblock %}</title>
     <script type="text/javascript" src="/static/javascript/prototype.js"></script>
     <style type="text/css">
+      body {
+        font-family: sans-serif;
+        border: 1px solid #ccc;
+        padding-bottom: 5px;
+      }
+      a {
+        color: #00687F;
+        outline: none;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
       #login_bar{
         background-color: #00687F;
         color: white;
@@ -13,6 +26,10 @@
       }
       #login_bar a {
         color: white;
+      }
+      #home_link {
+        float: left;
+        margin-right: 2px;
       }
       #admin_nav{
         float: left;
@@ -34,6 +51,9 @@
   </head>
   <body>
     <div id="login_bar">
+      <span id = "home_link">
+	<a href = "/">BounceBack Kids</a> |
+      </span>
       <span id="admin_nav">
 	{% if user and user.status == "admin" %}
 	<a href = "/admin/">Admin Home</a> | 
@@ -53,7 +73,7 @@
 	<a href="/volunteer_signup/">Sign Up</a> |
 	<a href="/login/">Log In</a>
 	{%- endif %}
-	| <a href="/faq/">FAQ</a>
+	| <a href="/faq/">Help</a>
       </span>
     </div>
 {%- if user_messages and user_messages|length>0 %}

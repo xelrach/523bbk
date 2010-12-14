@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 {% block title %}My Events{% endblock %}
 {% block content %}
-  <h2>My Events</h2>
+  <h2>My Events:</h2>
   {% for event in user_events %}
   <h3><a href = "/event/{{event.id}}">{{ event.title }}</a></h3>
-  <ul>
-  <li>{{ event.description }}</a></li>
-  <li>{{ event.start }}</a></li>
-  <li>{{ event.end }}</a></li>
-  </ul>
+  <p>
+  {{ event.description }}<br/>
+  Start: {{ event.start|dt }}<br/>
+  End: {{ event.end|dt }}</p>
   {% endfor %}
-  </ul> 
 {%- endblock %}
