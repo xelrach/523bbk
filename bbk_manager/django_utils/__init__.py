@@ -129,6 +129,9 @@ def urlencode(text):
     import urllib
     return urllib.quote(text)
 
+def full_datetime(dt):
+    return dt.strftime("%I:%M %p %B %d, %Y")
+
 env.filters['url'] = url
 env.filters['urlencode'] = urlencode
 env.filters['q'] = escape_quotes
@@ -138,3 +141,4 @@ env.filters['ts'] = make_timestamp
 env.filters['br'] = nl2br
 env.filters['ee'] = escape_escape
 env.filters['empty'] = none_to_empty
+env.filters['dt'] = full_datetime

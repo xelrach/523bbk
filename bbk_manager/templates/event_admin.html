@@ -1,13 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Bounce Back Kids -- Editing Event{% endblock %}
 {% block content %}
-  <h2>{{event.title}} Details <a href = "/event/{{event.id}}/edit">Edit event</a></h2>
-   <ul>
-    <li>{{ event.title }}</li>
-    <li>{{ event.description }}</li>
-    <li>{{ event.start }}</li>
-    <li>{{ event.end }}</li>
-   </ul>
+  <h2>{{event.title|e}} Details <a href = "/event/{{event.id}}/edit">Edit event</a></h2>
+  <p>Start: {{ event.start|dt }}<br />
+  End: {{ event.end|dt }}</p>
+  <p>{{ event.description|br }}</p>
   List of volunteers ({{length}} of {{event.max_volunteers}} maximum):   
    <ul>
    {% for volunteer in event_volunteers %}

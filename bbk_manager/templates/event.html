@@ -2,12 +2,9 @@
 {%- block title %}Bounce Back Kids Event {{event.title|e}}{% endblock %}
 {%- block content %}
   <h2>{{event.title|e}} Details</h2>
-  <ul>
-  <li>{{ event.title|e }}</li>
-  <li>{{ event.description|e }}</li>
-  <li>{{ event.start|e }}</li>
-  <li>{{ event.end|e }}</li>
-  </ul>
+  <p>Start: {{ event.start|dt }}<br />
+  End: {{ event.end|dt }}</p>
+  <p>{{ event.description|br }}</p>
 {%- if user and not signup and not max_full %}
   <form method="POST">
   <input type="submit" name="signup" value="Sign Up for Event" />
