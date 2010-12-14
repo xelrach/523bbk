@@ -251,13 +251,18 @@ def events_user(request):
     return render_to_response('events_user.html',{'user_events':user_events,'user':user})
 
 def event_admin_details(request, event_id):
+    user_messages = None
     user = check_login(request)
     if not user or user.status != "admin":
         return HttpResponseRedirect(reverse('bbk.views.home'))
     event = get_object_or_404(Event, id=event_id)
     event_volunteers = event.volunteers.all()
     length = len(event_volunteers)
-    return render_to_response('event_admin.html', {'event':event,'user':user, 'event_volunteers':event_volunteers, 'length':length})
+    if request.method == 'POST':
+        message = request.POST['email_message']
+        send_email_update(request, event_volunteers,message)
+        user_messages = ["Your message has been sent to the volunteers."]
+    return render_to_response('event_admin.html', {'event':event,'user':user,'user_messages':user_messages, 'event_volunteers':event_volunteers, 'length':length})
 
 def login(request):
     if request.method == 'POST':
@@ -307,6 +312,14 @@ def perform_logout(request):
 def pending(request):
     user = check_login(request)
     return render_to_response('pending.html', {'user':user})
+
+def send_email_update(request,event_volunteers,message):
+    message = "An administrator from BBK has updated an event with the follow message: " + message
+    subject, from_email, to, bcc = "BounceBack Kids Application", NOTIFICATION_EMAIL_ADDRESS, [NOTIFICATION_EMAIL_ADDRESS], [volunteer.email for volunteer in event_volunteers]
+
+    msg = EmailMultiAlternatives(subject, message, from_email, to, bcc=bcc)
+    msg.attach_alternative(message, "text/html")
+    msg.send()    
 
 def send_acception_email(request, volunteer):
     acception_message_base = "You've been accepted as a volunteer for BounceBack Kids! Please visit "
@@ -375,7 +388,7 @@ def volunteer(request,volunteer_id):
             volunteer.email = request.POST['email']
         if "status" in request.POST:
             if volunteer.status == "pending" and request.POST['status']=="active":
-                send_acception_email(volunteer)
+                send_acception_email(request, volunteer)
             volunteer.status = request.POST['status']
             pass
         volunteer.save()
